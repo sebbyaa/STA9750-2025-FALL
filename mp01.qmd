@@ -1,0 +1,423 @@
+---
+title: "Mini Project 01: Exploring Popular Programming on Netlfix"
+author: "Sebastian Alejos"
+date: today
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 2
+    code-fold: true
+    code-tools: true
+    code-summary: "Show code"
+    embed-resources: true
+execute:
+  warning: false
+  message: false
+  echo: true
+  output: false
+---
+## Summary
+
+Over the past decade, Netflix has transformed into a global entertainment powerhouse, driven by blockbuster releases and strategic international growth. Its programming now reaches audiences across continents, with viewership data reflecting both domestic and global resonance. The following dataset illustrates the scale and diversity of Netflix's reach,highlighting its impact across regions and genres for English and non-English speakers.
+
+## Dataset Used
+```{r}
+#| echo: true
+#| output: true
+
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+if(!dir.exists(file.path("data", "mp01"))){
+    dir.create(file.path("data", "mp01"), showWarnings=FALSE, recursive=TRUE)
+}
+
+GLOBAL_TOP_10_FILENAME <- file.path("data", "mp01", "global_top10_alltime.csv")
+
+if(!file.exists(GLOBAL_TOP_10_FILENAME)){
+    download.file("https://www.netflix.com/tudum/top10/data/all-weeks-global.tsv", 
+                  destfile=GLOBAL_TOP_10_FILENAME)
+}
+
+COUNTRY_TOP_10_FILENAME <- file.path("data", "mp01", "country_top10_alltime.csv")
+
+if(!file.exists(COUNTRY_TOP_10_FILENAME)){
+    download.file("https://www.netflix.com/tudum/top10/data/all-weeks-countries.tsv", 
+                  destfile=COUNTRY_TOP_10_FILENAME)
+}
+if(!require("tidyverse")) install.packages("tidyverse")
+library(readr)
+library(dplyr)
+
+GLOBAL_TOP_10 <- read_tsv(GLOBAL_TOP_10_FILENAME, na = "N/A")
+
+COUNTRY_TOP_10 <- read_tsv(COUNTRY_TOP_10_FILENAME, na = "N/A")
+
+install.packages("DT")
+library(DT)
+GLOBAL_TOP_10 |> 
+    head(n=20) |>
+    datatable(options=list(searching=FALSE, info=FALSE))
+    
+library(stringr)
+format_titles <- function(df){
+    colnames(df) <- str_replace_all(colnames(df), "_", " ") |> str_to_title()
+    df
+}
+
+GLOBAL_TOP_10 |> 
+    format_titles() |>
+    head(n=20) |>
+    datatable(options=list(searching=FALSE, info=FALSE)) |>
+    formatRound(c('Weekly Hours Viewed', 'Weekly Views'))
+    
+GLOBAL_TOP_10 |> 
+    select(-season_title) |>
+    format_titles() |>
+    head(n=20) |>
+    datatable(options=list(searching=FALSE, info=FALSE)) |>
+    formatRound(c('Weekly Hours Viewed', 'Weekly Views'))
+    
+GLOBAL_TOP_10 |> 
+    mutate(`runtime_(minutes)` = round(60 * runtime)) |>
+    select(-season_title, 
+           -runtime) |>
+    format_titles() |>
+    head(n=20) |>
+    datatable(options=list(searching=FALSE, info=FALSE)) |>
+    formatRound(c('Weekly Hours Viewed', 'Weekly Views'))
+```
+
+### Exploratory Questions
+
+## Q1: How many different countries does Netflix operate in?
+
+Answer: Netflix operates in 94 different countries, based on the available viewing history data.
+
+```{r}
+library(dplyr)
+
+num_countries <- n_distinct(COUNTRY_TOP_10$country_name)
+num_countries
+```
+
+
+## Q2:Which non-English language film has spent the most cumultative weeks in the global top 10? How many weeks did it spend?
+
+Answer: All quiet in the Western Front, a total of 23 weeks
+
+```{r}
+GLOBAL_TOP_10 |>
+  filter(category == "Films (Non-English)") |>
+  group_by(show_title) |>
+  summarise(total_weeks = max(cumulative_weeks_in_top_10, na.rm = TRUE)) |>
+  arrange(desc(total_weeks)) |>
+  slice(1)
+```
+
+## Q3: What is the longest film (English or non-English) to have ever appeared in the Netflix global Top 10? How long is it in minutes?
+
+Answer: The longest film to have appeared in Netflix global top 10 is "Pushpa 2: The Rule(Reloaded version)"
+with a run time of 224 minutes.
+
+```{r}
+longest_film <- GLOBAL_TOP_10 |>
+  filter(str_detect(category, "Films")) |>
+  filter(!is.na(runtime)) |>
+  arrange(desc(runtime)) |>
+  slice(1)
+
+film_name <- longest_film$show_title
+film_length <- round(longest_film$runtime * 60)
+```
+
+
+## Q4: For each of the four categories, which program has the most total hours of global viewership?
+
+Answer: 
+```{r}
+top_by_category <- GLOBAL_TOP_10 |>
+  group_by(category, show_title) |>
+  summarise(total_hours = sum(weekly_hours_viewed, na.rm = TRUE), .groups = "drop") |>
+  arrange(category, desc(total_hours)) |>
+  slice_max(order_by = total_hours, n = 1, by = category)
+library(DT)
+top_by_category |>
+  format_titles() |>
+  datatable(options = list(searching = FALSE, info = FALSE))
+```
+
+
+## Q5: Which TV show had the longest run in a country’s Top 10? How long was this run and in what country did it occur?
+
+Answer: The longest run TV Show was Money Heist that ran for 127 weeks in Top 10 in Pakistan.
+
+```{r}
+longest_run <- COUNTRY_TOP_10 |>
+  filter(str_detect(category, "TV")) |>
+  group_by(show_title, country_name) |>
+  summarise(max_weeks = max(cumulative_weeks_in_top_10, na.rm = TRUE), .groups = "drop") |>
+  arrange(desc(max_weeks)) |>
+  slice(1)
+longest_run
+```
+
+## Q6: Netflix provides over 200 weeks of service history for all but one country in our data set. Which is this and when did Netflix cease operations in that country?
+
+Answer: Netflix ceased its operations in Russia on February 27, 2022.
+
+```{r}
+country_weeks <- COUNTRY_TOP_10 |>
+  count(country_name, week, name = "week_count") |>
+  group_by(country_name) |>
+  summarise(
+    weeks_count = n(),
+    last_week = max(week, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  filter(weeks_count < 200) |>
+  arrange(weeks_count)
+country_weeks
+```
+
+
+## Q7: What is the total viewership of the TV show Squid Game?
+
+Answer: There were a total of 5,048,300,000 hours viewed for Squid Game
+
+```{r}
+squid_game_viewership <- GLOBAL_TOP_10 |>
+  filter(show_title == "Squid Game") |>
+  summarise(total_hours = sum(weekly_hours_viewed, na.rm = TRUE))
+squid_game_viewership
+```
+
+
+
+## Q8: The movie Red Notice has a runtime of 1 hour and 58 minutes. Approximately how many views did it receive in 2021?
+
+Answer: There were a total of 201,732,203 views for this film.
+
+```{r}
+runtime_hours <- 1 + 58 / 60  # = 1.9667
+
+red_notice_views <- GLOBAL_TOP_10 |>
+  filter(show_title == "Red Notice", str_detect(week, "^2021")) |>
+  summarise(total_hours = sum(weekly_hours_viewed, na.rm = TRUE)) |>
+  mutate(estimated_views = round(total_hours / runtime_hours))
+
+red_notice_views
+```
+
+
+## Q9: How many films reached Number 1 in the US but did not originally debut there? What is the most recent film to pull this off?
+
+Answer: 144 films reached number 1 in the US that was from a different origin. The most recent film to pull this off is K-Pop Demon Hunters released on September 14, 2025.
+
+```{r}
+film_debuts <- COUNTRY_TOP_10 |>
+  filter(category == "Films") |>
+  group_by(show_title) |>
+  arrange(week) |>
+  slice(1) |>
+  select(show_title, debut_country = country_name)
+
+
+us_top_films <- COUNTRY_TOP_10 |>
+  filter(category == "Films", country_name == "United States", weekly_rank == 1)
+
+
+foreign_debut_us_hits <- us_top_films |>
+  left_join(film_debuts, by = "show_title") |>
+  filter(debut_country != "United States")
+
+
+foreign_debut_summary <- foreign_debut_us_hits |>
+  summarise(
+    total_films = n_distinct(show_title),
+    most_recent = max(week, na.rm = TRUE)
+  )
+most_recent_film <- foreign_debut_us_hits |>
+  arrange(desc(week)) |>
+  slice(1) |>
+  pull(show_title)
+
+foreign_debut_summary
+most_recent_film
+
+```
+
+
+## Q10: Which TV show/season hit the top 10 in the most countries in its debut week? In how many countries did it chart?
+
+Answer: Emily in Paris hit top 10 in 94 countries. 
+
+```{r}
+debut_weeks <- COUNTRY_TOP_10 |>
+  filter(category == "TV") |>
+  group_by(show_title) |>
+  summarise(debut_week = min(week, na.rm = TRUE), .groups = "drop")
+
+debut_week_entries <- COUNTRY_TOP_10 |>
+  filter(category == "TV") |>
+  inner_join(debut_weeks, by = "show_title") |>
+  filter(week == debut_week)
+
+debut_country_counts <- debut_week_entries |>
+  group_by(show_title, debut_week) |>
+  summarise(country_count = n_distinct(country_name), .groups = "drop") |>
+  arrange(desc(country_count)) |>
+  slice(1)
+
+debut_country_counts
+```
+
+
+
+# Press Releases
+## Press Release: Stranger Things Solidifies Its Global Legacy With Unmatched Viewership
+
+Across its four seasons, Stranger Things has achieved has achieved over 2.97 billion hour viewed, making it Netflix's most-watched English-language TV series. The show remained in the Global Top 10 for more than 20 weeks, with its most recent season alone contributing 2.95 billion hours - a near total share of its cumulative viewership.
+
+Its reach spans 93 countries, underscoring its global resonance and cultural impact. Compared to other titles like Wednesday (2.84 billion hours) and Bridgerton (2.28 billion hours), Stranger Things leads in both scale and longevity, solidifying its place as a defining series of the streaming era.
+
+```{r}
+# Language_group column based on category
+GLOBAL_TOP_10 <- GLOBAL_TOP_10 |>
+  mutate(language_group = case_when(
+    str_detect(category, "English") ~ "English",
+    str_detect(category, "Non-English") ~ "Non-English",
+    TRUE ~ "Unknown"
+  ))
+
+# Impact — All-Time Metrics
+stranger_legacy <- GLOBAL_TOP_10 |>
+  filter(str_detect(show_title, "Stranger Things")) |>
+  summarise(
+    total_hours = sum(weekly_hours_viewed, na.rm = TRUE),
+    total_weeks = n_distinct(week),
+    .groups = "drop"
+  )
+
+stranger_countries <- COUNTRY_TOP_10 |>
+  filter(str_detect(show_title, "Stranger Things")) |>
+  summarise(
+    countries_charted = n_distinct(country_name),
+    .groups = "drop"
+  )
+
+# Combining legacy metrics
+stranger_global_impact <- bind_cols(stranger_legacy, stranger_countries)
+
+# Recent Season Performance — Last 50 Weeks
+stranger_recent <- GLOBAL_TOP_10 |>
+  filter(str_detect(show_title, "Stranger")) |>
+  arrange(desc(week)) |>
+  slice_head(n = 50) |>
+  summarise(
+    recent_hours = sum(weekly_hours_viewed, na.rm = TRUE),
+    max_cumulative_weeks = max(cumulative_weeks_in_top_10, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# Top Comparable English-Language TV Shows
+top_comparables <- GLOBAL_TOP_10 |>
+  filter(category == "TV (English)", !str_detect(show_title, "Stranger")) |>
+  group_by(show_title) |>
+  summarise(total_hours = sum(weekly_hours_viewed, na.rm = TRUE)) |>
+  arrange(desc(total_hours)) |>
+  slice(1:2)
+
+# Summary Diagram
+stranger_summary <- bind_cols(stranger_global_impact, stranger_recent)
+
+# Comparing Results
+print("Stranger Things — Global Impact Summary")
+print(stranger_summary)
+
+print("Top Comparable English-Language TV Shows")
+print(top_comparables)
+```
+
+## Press Release: India's New Found Success
+
+The Netflix Hindi-Language content is performing exceptionally well, 
+indicating a powerful shift in regional engagement and audience loyalty. Titles such as Scoop garnered 24.6 million hours viewed in 2 weeks. Moreover, popular show Class drew nearly 10 million hours in a single week. These metrics show a remarkable feat for content produced outside the United States.
+
+These titles demonstrate the culturally resonate storytelling. Maamla Legal Hai, another Hindi-language hit, added 13.3 million hours over two weeks, reinforicing the platform's ability to connect with viewers through local narratives and social relevance.
+With a 2023 baseline of 8.5 million in India, the platform's investment in Hindi-language originals is paying off. As Netflix continues to diversify its slate with more produced dramas, the Hindi market is poised to become a cornerstone of growth for Netflix.
+
+```{r}
+# Hindi-language titles (manual list if no language column)
+hindi_titles <- c("Jaane Jaan", "12th Fail", "Class", "Maamla Legal Hai", "Heeramandi", "Scoop")
+
+# Filtering Hindi titles that charted in India but not in the US
+hindi_india <- COUNTRY_TOP_10 |> filter(country_name == "India", show_title %in% hindi_titles)
+hindi_us <- COUNTRY_TOP_10 |> filter(country_name == "United States", show_title %in% hindi_titles)
+hindi_exclusive <- anti_join(hindi_india, hindi_us, by = "show_title") |> distinct(show_title)
+
+# Estimation of total viewership and subscriber count
+hindi_viewership <- GLOBAL_TOP_10 |>
+  filter(show_title %in% hindi_exclusive$show_title) |>
+  group_by(show_title) |>
+  summarise(
+    total_hours = sum(weekly_hours_viewed, na.rm = TRUE),
+    total_weeks = n_distinct(week),
+    .groups = "drop"
+  ) |>
+  mutate(estimated_users = round(total_hours / (20 * total_weeks))) |>
+  arrange(desc(total_hours))
+
+# Estimation of subscriber growth (2023 vs 2025)
+subscriber_growth <- tibble(
+  year = c(2023, 2025),
+  estimated_subscribers_millions = c(8.5, sum(hindi_viewership$estimated_users) / 1e6)
+)
+
+# Metrics
+hindi_viewership
+
+subscriber_growth
+```
+
+## Press Release: The Success of K-Pop Demon Hunters in Latin America
+
+K-Pop Demon Hunters has emerged as a global phenomenon driven by Latin American audiences. With a combined 559 million hours viewed and 335 million views over 14 consecutive weeks in the global Top 10, the film stands as Netflix's most dominant title in recent quarters. The film charted consistently across countries like Argentina, Brazil, Chile, Colombia and Peru. In Argentina alone, it remained in the Top 10 for 14 cumulative weeks, signaling sustained viewer loyalty.
+
+This level of engagement suggests that Latin American audiences are deeply receptive to high-concept, globally produced action films - especially those that blend pop culture, genre storytelling, and international flair. The film's performance across both global and regional charts highlights Netflix's ability to deliver content that resonates across borders while maintaining cultural relevance.
+
+```{r}
+# Top-performing global films
+global_films <- GLOBAL_TOP_10 |>
+  filter(str_detect(category, "Films")) |>
+  group_by(show_title) |>
+  summarise(
+    total_hours = sum(weekly_hours_viewed, na.rm = TRUE),
+    total_views = sum(weekly_views, na.rm = TRUE),
+    weeks_global = n_distinct(week),
+    .groups = "drop"
+  ) |>
+  arrange(desc(total_hours)) |>
+  slice_head(n = 10)
+
+# Latin American countries
+latin_countries <- c("Argentina", "Brazil", "Mexico", "Colombia", "Chile", "Peru")
+
+latin_data <- COUNTRY_TOP_10 |>
+  filter(country_name %in% latin_countries, category == "Films")
+
+# Measuring regional global engagement 
+regional_hits <- latin_data |>
+  filter(show_title %in% global_films$show_title) |>
+  group_by(country_name, show_title) |>
+  summarise(
+    weeks_in_top_10 = n(),
+    .groups = "drop"
+  ) |>
+  arrange(desc(weeks_in_top_10))
+
+# Results
+global_films
+regional_hits
+```
+
+
