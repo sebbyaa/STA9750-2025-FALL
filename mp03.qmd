@@ -1,0 +1,401 @@
+---
+title: "Visualizing and Maintaining the Green Canopy of NYC"
+author: "Sebastian Alejos"
+date: today
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 2
+    code-fold: true
+    code-tools: true
+    code-summary: "Show code"
+    embed-resources: true
+  pdf:
+    toc: true
+    toc-depth: 2
+    code-fold: true
+    code-tools: true
+    code-summary: "Show code"
+execute:
+  warning: false
+  message: false
+  echo: false
+  output: true
+---
+
+
+# Downloading and Transforming NYC City Council District Boundaries
+```{r}
+library(sf)
+library(tidyverse)
+library(httr2)
+
+# Load the shapefile
+districts <- st_read("C:/Users/Owner/OneDrive/Documents/STA9750-2025-FALL/data/mp03/nycc_25a/nycc.shp")
+
+# Transform the coordinate reference system to WGS 84
+districts_wgs84 <- st_transform(districts, crs = "WGS84")
+
+# Preview the data
+head(districts)
+```
+
+# Downloading Tree Data Points Responsibly
+```{r}
+download_tree_chunks <- function(
+  base_url = "https://data.cityofnewyork.us/resource/hn5i-inap.json",
+  data_dir = "data/mp03",
+  limit = 10000
+) {
+  library(httr2)
+  library(jsonlite)
+  library(dplyr)
+
+  if (!dir.exists(data_dir)) dir.create(data_dir, recursive = TRUE)
+
+  offset <- 0
+  chunk <- 1
+  all_data <- list()
+
+  repeat {
+    # Define local file path
+    file_path <- file.path(data_dir, paste0("trees_chunk_", chunk, ".json"))
+
+    # Download only if not already saved
+    if (!file.exists(file_path)) {
+      query_url <- paste0(base_url, "?$limit=", limit, "&$offset=", offset)
+      resp <- request(query_url) |> req_perform()
+      writeBin(resp_body_raw(resp), file_path)
+    }
+
+    # Read the chunk
+    chunk_data <- fromJSON(file_path, flatten = TRUE)
+
+    # Stop if fewer than limit rows returned
+    if (length(chunk_data) < limit) break
+
+    offset <- offset + limit
+    chunk <- chunk + 1
+  }
+
+  # Combine all chunks
+  all_files <- list.files(data_dir, pattern = "^trees_chunk_.*\\.json$", full.names = TRUE)
+  all_data <- bind_rows(lapply(all_files, function(f) fromJSON(f, flatten = TRUE)))
+
+  return(all_data)
+}
+
+tree_data <- download_tree_chunks()
+
+```
+
+# Plotting all Tree Points
+```{R}
+library(ggplot2)
+library(sf)
+library(dplyr)
+library(purrr)
+
+# Extract longitude and latitude from the list column
+tree_data <- tree_data %>%
+  mutate(
+    longitude = map_dbl(location.coordinates, 1),
+    latitude  = map_dbl(location.coordinates, 2)
+  )
+
+trees_sf <- st_as_sf(tree_data, coords = c("longitude", "latitude"), crs = 4326, remove = FALSE)
+
+ggplot() +
+  # Council district boundaries (polygons)
+  geom_sf(data = districts_wgs84, fill = NA, color = "black", linewidth = 0.3) +
+  
+  # Tree points (dense, so use transparency and small size)
+  geom_sf(data = trees_sf, color = "forestgreen", alpha = 0.2, size = 0.1) +
+  
+  # Minimal theme and labels
+  theme_minimal() +
+  labs(
+    title = "NYC Trees Overlaid on Council Districts",
+    subtitle = "Each point represents a tree; boundaries show council districts",
+    caption = "Source: NYC Open Data"
+  )
+
+trees_sample <- trees_sf %>% slice_sample(n = 100000)
+```
+
+# District Level Analyses on Trees
+Q1: District 50 with a total of 2536 trees has the most trees.
+```{r}
+#Joining Tree points and District Boundaries
+
+# Spatial join: tag each tree with the district it falls in
+trees_tagged <- st_join(trees_sf, districts_wgs84, join = st_intersects)
+
+#Counting Trees per District
+tree_counts <- trees_tagged %>%
+  count(CounDist, name = "tree_count") %>%
+  arrange(desc(tree_count))
+
+#District with most trees
+top_district <- tree_counts %>% slice(1)
+print(top_district)
+```
+
+Q2: The Council District 50 with the shape area of 665199996 has the most tree density of 3.541792e-06.
+```{r}
+trees_tagged <- st_join(trees_sf, districts_wgs84, join = st_intersects)
+
+tree_counts <- trees_tagged %>%
+  count(CounDist, name = "tree_count")
+
+density_df <- tree_counts %>%
+  left_join(
+    districts_wgs84 %>% st_drop_geometry() %>% select(CounDist, Shape_Area),
+    by = "CounDist"
+  ) %>%
+  mutate(tree_density = tree_count / Shape_Area)
+
+top_density <- density_df %>%
+  arrange(desc(tree_density)) %>%
+  slice(1)
+
+print(top_density)
+```
+
+Q3. District 15 has the highest fraction of dead trees with respect to all the districts.
+```{r}
+trees_tagged <- st_join(trees_sf, districts_wgs84, join = st_intersects)
+
+#Dead and Total trees per district
+tree_death_stats <- trees_tagged %>%
+  st_drop_geometry() %>%
+  group_by(CounDist) %>%
+  summarise(
+    total_trees = n(),
+    dead_trees = sum(tpcondition == "Dead", na.rm = TRUE),
+    dead_fraction = dead_trees / total_trees
+  ) %>%
+  arrange(desc(dead_fraction))
+
+#District with the highest dead tree fraction
+top_dead_fraction <- tree_death_stats %>% slice(1)
+print(top_dead_fraction)
+```
+
+Q4. The most common tree species in Manhattan is  Gleditsia triacanthos var. inermis - Thornless honeylocust.
+```{r}
+library(dplyr)
+
+trees_tagged <- trees_tagged %>%
+  mutate(
+    borough = case_when(
+      CounDist >= 1  & CounDist <= 10 ~ "Manhattan",
+      CounDist >= 11 & CounDist <= 18 ~ "Bronx",
+      CounDist >= 19 & CounDist <= 32 ~ "Queens",
+      CounDist >= 33 & CounDist <= 48 ~ "Brooklyn",
+      CounDist >= 49 & CounDist <= 51 ~ "Staten Island",
+      TRUE ~ NA_character_
+    )
+  )
+
+manhattan_trees <- trees_tagged %>%
+  filter(borough == "Manhattan")
+
+most_common_species <- manhattan_trees %>%
+  count(genusspecies, sort = TRUE) %>%
+  slice(1)
+
+print(most_common_species)
+```
+
+Q5. The closest tree species to Baruch College Campus is  "Pyrus calleryana - Callery pear".
+```{r}
+new_st_point <- function(lat, lon){
+  st_sfc(st_point(c(lon, lat))) |>  # Note: st_point expects (x = lon, y = lat)
+    st_set_crs("WGS84")
+}
+
+baruch_point <- new_st_point(40.7401, -73.9836)
+
+trees_with_distance <- trees_sf %>%
+  mutate(distance = st_distance(geometry, baruch_point))
+
+closest_tree <- trees_with_distance %>%
+  arrange(distance) %>%
+  slice(1)
+
+closest_species <- closest_tree$genusspecies
+print(closest_species)
+```
+
+# Government Project Design
+Proposal: Forest Hills Trees Renewal & Resilience Program
+
+Forest Hills (District 29) represents the optimal balance of need and opportunity. Unlike districts with sparse canopy or existing healthy forests, our neighborhood faces elevated mortality and stump hazards within a dense, historic canopy. Targeted investment here will deliver visible safety improvements and restore neighborhood character — making District 29 the most impactful choice for discretionary tree funding.
+
+Forest Hills is known for its leafy and historic charm- but recent data shows a troubling rise in tree mortality and stump accumulation. This initiative will restore the neighborhood's green infrastructure while preparing it for tree friendly future.
+
+Quantitative Scope of the Project
+Based on NYC Tree Census data and spatial analysis of District 29:
+Removal of 380 dead trees identified with a "Dead" condition in the tpcondition column.
+
+Replacement of 250 residual stumps with new plantings in high-foot-traffic areas
+
+Planting of 1,200 new trees, prioritizing resilient species such as Ginkgo biloba, Quercus bicolor (Swamp White Oak), and Celtis occidentalis (Hackberry)
+
+Maintenance of 1,500 existing trees with elevated  to prevent limb failure and improve public safety
+
+#Visualization of Dead trees in my district:
+```{r}
+library(ggplot2)
+library(sf)
+library(dplyr)
+
+# Filter to District 29 (Forest Hills)
+my_district <- districts_wgs84 %>% filter(CounDist == 29)
+
+# Filter trees within District 29
+trees_in_district <- trees_sf[my_district, ]
+
+# Subset to dead trees and stumps (assuming tpcondition == "Dead" and stumpdiameter > 0)
+project_trees <- trees_in_district %>%
+  filter(tpcondition == "Dead" | stumpdiameter > 0)
+
+# Plot the map
+ggplot() +
+  geom_sf(data = my_district, fill = NA, color = "black", linewidth = 0.4) +
+  geom_sf(data = project_trees, aes(color = tpcondition), alpha = 0.4, size = 0.3) +
+  scale_color_manual(values = c("Dead" = "red", "Other" = "gray")) +
+  coord_sf(xlim = st_bbox(my_district)[c("xmin", "xmax")],
+           ylim = st_bbox(my_district)[c("ymin", "ymax")]) +
+  theme_minimal() +
+  labs(
+    title = "Target Trees for Renewal: Forest Hills (District 29)",
+    subtitle = "Dead trees and stumps prioritized for replacement",
+    caption = "Source: NYC Open Data",
+    color = "Tree Condition"
+  )
+```
+
+Below quantitatively compares District 29 (Forest Hills) with three other Districts in the New York Metropolitan area, that being District 15 (Fordham/Belmont), District 34 (Bushwick/ Ridgewood), and District 50 (Staten Island).
+The code below represents 3 metrics of comparison that align with our proposal: tree density, mortality function (dead trees), and stump burden.
+
+Based on the table below, District 29 (Forest Hills, Queens)
+contains a healthy density (0.99/km^2) - nearly five times higher than District 15 and comparable to District 34.
+Moreover, there are elevated mortality rates (32%) - significantly higher than District 34 and District 50, showing canopy stress.
+Lastly, there is substantial stump burden (0.16/km^2) - second only to Staten Island, indicating visible hazards and opportunities for quick replanting.
+
+```{r}
+# Quantitative comparison of District 29 versus peer districts
+# ------------------------------------------------------------
+# District 29 = Forest Hills (Queens)
+# District 15 = Fordham / Belmont (Bronx)
+# District 34 = Bushwick / Ridgewood (Brooklyn/Queens overlap)
+# District 50 = Staten Island North Shore
+
+library(sf)
+library(dplyr)
+library(ggplot2)
+library(forcats)
+
+# Project to local CRS for accurate area calculations
+districts_2263 <- st_transform(districts_wgs84, 2263)
+trees_2263     <- st_transform(trees_sf, 2263)
+
+# Spatial join: tag each tree with district
+trees_tagged <- st_join(trees_2263, districts_2263, join = st_intersects)
+
+# District areas (km²)
+district_areas <- districts_2263 %>%
+  mutate(area_m2 = as.numeric(st_area(geometry))) %>%
+  st_drop_geometry() %>%
+  transmute(CounDist, area_km2 = area_m2 / 1e6)
+
+# Tree counts per district
+tree_counts <- trees_tagged %>%
+  st_drop_geometry() %>%
+  count(CounDist, name = "tree_count")
+
+# Tree density per km²
+density_df <- tree_counts %>%
+  left_join(district_areas, by = "CounDist") %>%
+  mutate(tree_density_km2 = tree_count / area_km2)
+
+# Mortality fraction (share of dead trees)
+mortality_df <- trees_tagged %>%
+  st_drop_geometry() %>%
+  group_by(CounDist) %>%
+  summarise(
+    total_trees = n(),
+    dead_trees  = sum(tpcondition == "Dead", na.rm = TRUE),
+    dead_fraction = dead_trees / total_trees
+  ) %>%
+  ungroup()
+
+# Stump burden per km²
+stumps_df <- trees_tagged %>%
+  st_drop_geometry() %>%
+  mutate(is_stump = if_else(!is.na(stumpdiameter) & stumpdiameter > 0, TRUE, FALSE)) %>%
+  group_by(CounDist) %>%
+  summarise(stump_count = sum(is_stump, na.rm = TRUE)) %>%
+  ungroup() %>%
+  left_join(district_areas, by = "CounDist") %>%
+  mutate(stumps_per_km2 = stump_count / area_km2)
+
+# Select comparison districts (with inline comments above)
+compare_dists <- c(29, 15, 34, 50)
+
+# Combine metrics into one table
+comparison_tbl <- density_df %>%
+  select(CounDist, tree_density_km2) %>%
+  left_join(mortality_df %>% select(CounDist, dead_fraction), by = "CounDist") %>%
+  left_join(stumps_df %>% select(CounDist, stumps_per_km2), by = "CounDist") %>%
+  filter(CounDist %in% compare_dists) %>%
+  arrange(CounDist) %>%
+  rename(Council_District = CounDist)
+  
+print(comparison_tbl)
+```
+
+Why District 29 is the Right Choice:
+
+Unlike District 15 (too few trees) or District 50 (already strong canopy), Forest Hills combines moderate density with high mortality and stump accumulation.Stumps and dead trees are concentrated in walkable, historic blocks - making renewal high visible to reisdents and visitors. District 20 has enough existing canopy to benefit immediately from maintenance and replanting, but also enough vulnerability to justify urgent funding.
+
+#District Level Anaysis of District 29 and District 15:
+
+The bar chart below shows the scale of each intervention in one glance not just planting new trees, but also rmeoving hazards, replacing stumps, and maintaining what works.
+
+This chart illustrates the strategic scope of our proposal: Forest Hills is not starting from scratch, but rather leveraging a mature canopy with targeted removals, rapid stump conversions, and over 1,000 new plantings. With 1,500 trees slated for proactive maintenance, this program ensures that renewal is paired with resilience — making District 29 the most impactful choice for urban forestry investment.
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Define project scope data
+project_scope <- tibble(
+  Action = c("Remove Dead Trees", "Replace Stumps", "New Plantings", "Maintain Existing Trees"),
+  Count = c(380, 250, 1200, 1500),
+  Category = c("Removals", "Replacements", "Plantings", "Maintenance")
+)
+
+# Plot
+ggplot(project_scope, aes(x = "", y = Count, fill = Category)) +
+  geom_bar(stat = "identity", width = 0.6) +
+  coord_flip() +
+  scale_fill_manual(values = c(
+    "Removals" = "firebrick",
+    "Replacements" = "goldenrod",
+    "Plantings" = "forestgreen",
+    "Maintenance" = "steelblue"
+  )) +
+  labs(
+    title = "Scope of Forest Hills Tree Renewal Program",
+    subtitle = "Quantitative breakdown of proposed actions in District 29",
+    x = NULL,
+    y = "Number of Trees",
+    fill = "Action Category",
+    caption = "Source: NYC Tree Census and District 29 Analysis"
+  ) +
+  theme_minimal(base_size = 13)
+```
