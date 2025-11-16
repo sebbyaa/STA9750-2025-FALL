@@ -3866,8 +3866,23 @@ vertical-align: -.125em;
   <li><a href="#downloading-and-transforming-nyc-city-council-district-boundaries" id="toc-downloading-and-transforming-nyc-city-council-district-boundaries" class="nav-link active" data-scroll-target="#downloading-and-transforming-nyc-city-council-district-boundaries">Downloading and Transforming NYC City Council District Boundaries</a></li>
   <li><a href="#downloading-tree-data-points-responsibly" id="toc-downloading-tree-data-points-responsibly" class="nav-link" data-scroll-target="#downloading-tree-data-points-responsibly">Downloading Tree Data Points Responsibly</a></li>
   <li><a href="#plotting-all-tree-points" id="toc-plotting-all-tree-points" class="nav-link" data-scroll-target="#plotting-all-tree-points">Plotting all Tree Points</a></li>
-  <li><a href="#district-level-analyses-on-trees" id="toc-district-level-analyses-on-trees" class="nav-link" data-scroll-target="#district-level-analyses-on-trees">District Level Analyses on Trees</a></li>
-  <li><a href="#government-project-design" id="toc-government-project-design" class="nav-link" data-scroll-target="#government-project-design">Government Project Design</a></li>
+  <li><a href="#district-level-analyses-on-trees" id="toc-district-level-analyses-on-trees" class="nav-link" data-scroll-target="#district-level-analyses-on-trees">District Level Analyses on Trees</a>
+  <ul class="collapse">
+  <li><a href="#q1-district-50-with-a-total-of-2536-trees-has-the-most-trees." id="toc-q1-district-50-with-a-total-of-2536-trees-has-the-most-trees." class="nav-link" data-scroll-target="#q1-district-50-with-a-total-of-2536-trees-has-the-most-trees.">Q1: District 50 with a total of 2536 trees has the most trees.</a></li>
+  <li><a href="#q2-the-council-district-50-with-the-shape-area-of-665199996-has-the-most-tree-density-of-3.541792e-06." id="toc-q2-the-council-district-50-with-the-shape-area-of-665199996-has-the-most-tree-density-of-3.541792e-06." class="nav-link" data-scroll-target="#q2-the-council-district-50-with-the-shape-area-of-665199996-has-the-most-tree-density-of-3.541792e-06.">Q2: The Council District 50 with the shape area of 665199996 has the most tree density of 3.541792e-06.</a></li>
+  <li><a href="#q3.-district-15-has-the-highest-fraction-of-dead-trees-with-respect-to-all-the-districts." id="toc-q3.-district-15-has-the-highest-fraction-of-dead-trees-with-respect-to-all-the-districts." class="nav-link" data-scroll-target="#q3.-district-15-has-the-highest-fraction-of-dead-trees-with-respect-to-all-the-districts.">Q3. District 15 has the highest fraction of dead trees with respect to all the districts.</a></li>
+  <li><a href="#q4.-the-most-common-tree-species-in-manhattan-is-gleditsia-triacanthos-var.-inermis---thornless-honeylocust." id="toc-q4.-the-most-common-tree-species-in-manhattan-is-gleditsia-triacanthos-var.-inermis---thornless-honeylocust." class="nav-link" data-scroll-target="#q4.-the-most-common-tree-species-in-manhattan-is-gleditsia-triacanthos-var.-inermis---thornless-honeylocust.">Q4. The most common tree species in Manhattan is Gleditsia triacanthos var. inermis - Thornless honeylocust.</a></li>
+  <li><a href="#q5.-the-closest-tree-species-to-baruch-college-campus-is-pyrus-calleryana---callery-pear." id="toc-q5.-the-closest-tree-species-to-baruch-college-campus-is-pyrus-calleryana---callery-pear." class="nav-link" data-scroll-target="#q5.-the-closest-tree-species-to-baruch-college-campus-is-pyrus-calleryana---callery-pear.">Q5. The closest tree species to Baruch College Campus is “Pyrus calleryana - Callery pear”.</a></li>
+  </ul></li>
+  <li><a href="#government-project-design" id="toc-government-project-design" class="nav-link" data-scroll-target="#government-project-design">Government Project Design</a>
+  <ul class="collapse">
+  <li><a href="#quantitative-scope-of-the-project" id="toc-quantitative-scope-of-the-project" class="nav-link" data-scroll-target="#quantitative-scope-of-the-project">Quantitative Scope of the Project</a></li>
+  </ul></li>
+  <li><a href="#visualization-of-dead-trees-in-district-29" id="toc-visualization-of-dead-trees-in-district-29" class="nav-link" data-scroll-target="#visualization-of-dead-trees-in-district-29">Visualization of Dead trees in District 29:</a>
+  <ul class="collapse">
+  <li><a href="#why-district-29-is-the-right-choice" id="toc-why-district-29-is-the-right-choice" class="nav-link" data-scroll-target="#why-district-29-is-the-right-choice">Why District 29 is the Right Choice:</a></li>
+  </ul></li>
+  <li><a href="#district-level-anaysis-of-district-29-and-district-15" id="toc-district-level-anaysis-of-district-29-and-district-15" class="nav-link" data-scroll-target="#district-level-anaysis-of-district-29-and-district-15">District Level Anaysis of District 29 and District 15:</a></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="mp03.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
@@ -3907,6 +3922,7 @@ vertical-align: -.125em;
 
 <section id="downloading-and-transforming-nyc-city-council-district-boundaries" class="level1">
 <h1>Downloading and Transforming NYC City Council District Boundaries</h1>
+<p>The output below shows District identifiers shuch as CounDist (Council District), Shape_Leng (Perimeter length of the district boundary), Shape_Area (area of the district in square feet), and geometry (atcual polygon coordinates).</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Reading layer `nycc&#39; from data source 
@@ -3936,6 +3952,7 @@ Projected CRS: NAD83 / New York Long Island (ftUS)
 </section>
 <section id="downloading-tree-data-points-responsibly" class="level1">
 <h1>Downloading Tree Data Points Responsibly</h1>
+<p>The dataset below collects data from New York City’s public inventory. The attributes include location (latitude and longitude), the species of the tree, size, health/condition, status, stewardship, and other attributes.</p>
 </section>
 <section id="plotting-all-tree-points" class="level1">
 <h1>Plotting all Tree Points</h1>
@@ -3951,7 +3968,8 @@ Projected CRS: NAD83 / New York Long Island (ftUS)
 </section>
 <section id="district-level-analyses-on-trees" class="level1">
 <h1>District Level Analyses on Trees</h1>
-<p>Q1: District 50 with a total of 2536 trees has the most trees.</p>
+<section id="q1-district-50-with-a-total-of-2536-trees-has-the-most-trees." class="level2">
+<h2 class="anchored" data-anchor-id="q1-district-50-with-a-total-of-2536-trees-has-the-most-trees.">Q1: District 50 with a total of 2536 trees has the most trees.</h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 1 feature and 2 fields
@@ -3963,7 +3981,9 @@ Geodetic CRS:  WGS 84
 1       50       2356 MULTIPOINT ((-74.02614 40.6...</code></pre>
 </div>
 </div>
-<p>Q2: The Council District 50 with the shape area of 665199996 has the most tree density of 3.541792e-06.</p>
+</section>
+<section id="q2-the-council-district-50-with-the-shape-area-of-665199996-has-the-most-tree-density-of-3.541792e-06." class="level2">
+<h2 class="anchored" data-anchor-id="q2-the-council-district-50-with-the-shape-area-of-665199996-has-the-most-tree-density-of-3.541792e-06.">Q2: The Council District 50 with the shape area of 665199996 has the most tree density of 3.541792e-06.</h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 1 feature and 4 fields
@@ -3975,7 +3995,9 @@ Geodetic CRS:  WGS 84
 1       50       2356  665199996 3.541792e-06 MULTIPOINT ((-74.02614 40.6...</code></pre>
 </div>
 </div>
-<p>Q3. District 15 has the highest fraction of dead trees with respect to all the districts.</p>
+</section>
+<section id="q3.-district-15-has-the-highest-fraction-of-dead-trees-with-respect-to-all-the-districts." class="level2">
+<h2 class="anchored" data-anchor-id="q3.-district-15-has-the-highest-fraction-of-dead-trees-with-respect-to-all-the-districts.">Q3. District 15 has the highest fraction of dead trees with respect to all the districts.</h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 4
@@ -3984,7 +4006,9 @@ Geodetic CRS:  WGS 84
 1       15          20         10           0.5</code></pre>
 </div>
 </div>
-<p>Q4. The most common tree species in Manhattan is Gleditsia triacanthos var. inermis - Thornless honeylocust.</p>
+</section>
+<section id="q4.-the-most-common-tree-species-in-manhattan-is-gleditsia-triacanthos-var.-inermis---thornless-honeylocust." class="level2">
+<h2 class="anchored" data-anchor-id="q4.-the-most-common-tree-species-in-manhattan-is-gleditsia-triacanthos-var.-inermis---thornless-honeylocust.">Q4. The most common tree species in Manhattan is Gleditsia triacanthos var. inermis - Thornless honeylocust.</h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 1 feature and 2 fields
@@ -3998,23 +4022,31 @@ Geodetic CRS:  WGS 84
 1 MULTIPOINT ((-73.99301 40.7...</code></pre>
 </div>
 </div>
-<p>Q5. The closest tree species to Baruch College Campus is “Pyrus calleryana - Callery pear”.</p>
+</section>
+<section id="q5.-the-closest-tree-species-to-baruch-college-campus-is-pyrus-calleryana---callery-pear." class="level2">
+<h2 class="anchored" data-anchor-id="q5.-the-closest-tree-species-to-baruch-college-campus-is-pyrus-calleryana---callery-pear.">Q5. The closest tree species to Baruch College Campus is “Pyrus calleryana - Callery pear”.</h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] &quot;Pyrus calleryana - Callery pear&quot;</code></pre>
 </div>
 </div>
 </section>
+</section>
 <section id="government-project-design" class="level1">
 <h1>Government Project Design</h1>
 <p>Proposal: Forest Hills Trees Renewal &amp; Resilience Program</p>
 <p>Forest Hills (District 29) represents the optimal balance of need and opportunity. Unlike districts with sparse canopy or existing healthy forests, our neighborhood faces elevated mortality and stump hazards within a dense, historic canopy. Targeted investment here will deliver visible safety improvements and restore neighborhood character — making District 29 the most impactful choice for discretionary tree funding.</p>
 <p>Forest Hills is known for its leafy and historic charm- but recent data shows a troubling rise in tree mortality and stump accumulation. This initiative will restore the neighborhood’s green infrastructure while preparing it for tree friendly future.</p>
-<p>Quantitative Scope of the Project Based on NYC Tree Census data and spatial analysis of District 29: Removal of 380 dead trees identified with a “Dead” condition in the tpcondition column.</p>
-<p>Replacement of 250 residual stumps with new plantings in high-foot-traffic areas</p>
-<p>Planting of 1,200 new trees, prioritizing resilient species such as Ginkgo biloba, Quercus bicolor (Swamp White Oak), and Celtis occidentalis (Hackberry)</p>
-<p>Maintenance of 1,500 existing trees with elevated to prevent limb failure and improve public safety</p>
-<p>#Visualization of Dead trees in my district:</p>
+<section id="quantitative-scope-of-the-project" class="level2">
+<h2 class="anchored" data-anchor-id="quantitative-scope-of-the-project">Quantitative Scope of the Project</h2>
+<p>Based on NYC Tree Census data and spatial analysis of District 29: Removal of 380 dead trees identified with a “Dead” condition in the tpcondition column.</p>
+<p>Replacement of 250 residual stumps with new plantings in high-foot-traffic areas.</p>
+<p>Planting of 1,200 new trees, prioritizing resilient species such as Ginkgo biloba, Quercus bicolor (Swamp White Oak), and Celtis occidentalis (Hackberry).</p>
+<p>Maintenance of 1,500 existing trees with elevated to prevent limb failure and improve public safety.</p>
+</section>
+</section>
+<section id="visualization-of-dead-trees-in-district-29" class="level1">
+<h1>Visualization of Dead trees in District 29:</h1>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -4035,10 +4067,14 @@ Geodetic CRS:  WGS 84
 4               50        3.5417867     0.1315789     0.40288575</code></pre>
 </div>
 </div>
-<p>Why District 29 is the Right Choice:</p>
+<section id="why-district-29-is-the-right-choice" class="level2">
+<h2 class="anchored" data-anchor-id="why-district-29-is-the-right-choice">Why District 29 is the Right Choice:</h2>
 <p>Unlike District 15 (too few trees) or District 50 (already strong canopy), Forest Hills combines moderate density with high mortality and stump accumulation.Stumps and dead trees are concentrated in walkable, historic blocks - making renewal high visible to reisdents and visitors. District 20 has enough existing canopy to benefit immediately from maintenance and replanting, but also enough vulnerability to justify urgent funding.</p>
-<p>#District Level Anaysis of District 29 and District 15:</p>
-<p>The bar chart below shows the scale of each intervention in one glance not just planting new trees, but also rmeoving hazards, replacing stumps, and maintaining what works.</p>
+</section>
+</section>
+<section id="district-level-anaysis-of-district-29-and-district-15" class="level1">
+<h1>District Level Anaysis of District 29 and District 15:</h1>
+<p>The bar chart below shows the scale of each intervention in one glance not just planting new trees, but also removing hazards, replacing stumps, and maintaining what works.</p>
 <p>This chart illustrates the strategic scope of our proposal: Forest Hills is not starting from scratch, but rather leveraging a mature canopy with targeted removals, rapid stump conversions, and over 1,000 new plantings. With 1,500 trees slated for proactive maintenance, this program ensures that renewal is paired with resilience — making District 29 the most impactful choice for urban forestry investment.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -4534,379 +4570,383 @@ Geodetic CRS:  WGS 84
 <span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="fu"># Downloading and Transforming NYC City Council District Boundaries</span></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr2)</span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the shapefile</span></span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>districts <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;C:/Users/Owner/OneDrive/Documents/STA9750-2025-FALL/data/mp03/nycc_25a/nycc.shp&quot;</span>)</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>The output below shows District identifiers shuch as CounDist (Council District), Shape_Leng (Perimeter length of the district boundary), Shape_Area (area of the district in square feet), and geometry (atcual polygon coordinates).</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr2)</span>
 <span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform the coordinate reference system to WGS 84</span></span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>districts_wgs84 <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(districts, <span class="at">crs =</span> <span class="st">&quot;WGS84&quot;</span>)</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the shapefile</span></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>districts <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;C:/Users/Owner/OneDrive/Documents/STA9750-2025-FALL/data/mp03/nycc_25a/nycc.shp&quot;</span>)</span>
 <span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview the data</span></span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(districts)</span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a><span class="fu"># Downloading Tree Data Points Responsibly</span></span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>download_tree_chunks <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
-<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">base_url =</span> <span class="st">&quot;https://data.cityofnewyork.us/resource/hn5i-inap.json&quot;</span>,</span>
-<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">data_dir =</span> <span class="st">&quot;data/mp03&quot;</span>,</span>
-<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>  <span class="at">limit =</span> <span class="dv">10000</span></span>
-<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>) {</span>
-<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(httr2)</span>
-<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(jsonlite)</span>
-<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dplyr)</span>
-<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(data_dir)) <span class="fu">dir.create</span>(data_dir, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>  offset <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>  chunk <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>  all_data <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform the coordinate reference system to WGS 84</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>districts_wgs84 <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(districts, <span class="at">crs =</span> <span class="st">&quot;WGS84&quot;</span>)</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview the data</span></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(districts)</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a><span class="fu"># Downloading Tree Data Points Responsibly</span></span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>The dataset below collects data from New York City&#39;s public inventory. The attributes include location (latitude and longitude), the species of the tree, size, health/condition, status, stewardship, and other attributes. </span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>download_tree_chunks <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">base_url =</span> <span class="st">&quot;https://data.cityofnewyork.us/resource/hn5i-inap.json&quot;</span>,</span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">data_dir =</span> <span class="st">&quot;data/mp03&quot;</span>,</span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">limit =</span> <span class="dv">10000</span></span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>) {</span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(httr2)</span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(jsonlite)</span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dplyr)</span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(data_dir)) <span class="fu">dir.create</span>(data_dir, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>  <span class="cf">repeat</span> {</span>
-<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define local file path</span></span>
-<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>    file_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(data_dir, <span class="fu">paste0</span>(<span class="st">&quot;trees_chunk_&quot;</span>, chunk, <span class="st">&quot;.json&quot;</span>))</span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>  offset <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>  chunk <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>  all_data <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
 <span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Download only if not already saved</span></span>
-<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(file_path)) {</span>
-<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>      query_url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(base_url, <span class="st">&quot;?$limit=&quot;</span>, limit, <span class="st">&quot;&amp;$offset=&quot;</span>, offset)</span>
-<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a>      resp <span class="ot">&lt;-</span> <span class="fu">request</span>(query_url) <span class="sc">|&gt;</span> <span class="fu">req_perform</span>()</span>
-<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>      <span class="fu">writeBin</span>(<span class="fu">resp_body_raw</span>(resp), file_path)</span>
-<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Read the chunk</span></span>
-<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>    chunk_data <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(file_path, <span class="at">flatten =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Stop if fewer than limit rows returned</span></span>
-<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(chunk_data) <span class="sc">&lt;</span> limit) <span class="cf">break</span></span>
-<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a>    offset <span class="ot">&lt;-</span> offset <span class="sc">+</span> limit</span>
-<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a>    chunk <span class="ot">&lt;-</span> chunk <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>  <span class="cf">repeat</span> {</span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define local file path</span></span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>    file_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(data_dir, <span class="fu">paste0</span>(<span class="st">&quot;trees_chunk_&quot;</span>, chunk, <span class="st">&quot;.json&quot;</span>))</span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Download only if not already saved</span></span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(file_path)) {</span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>      query_url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(base_url, <span class="st">&quot;?$limit=&quot;</span>, limit, <span class="st">&quot;&amp;$offset=&quot;</span>, offset)</span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>      resp <span class="ot">&lt;-</span> <span class="fu">request</span>(query_url) <span class="sc">|&gt;</span> <span class="fu">req_perform</span>()</span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>      <span class="fu">writeBin</span>(<span class="fu">resp_body_raw</span>(resp), file_path)</span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Read the chunk</span></span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>    chunk_data <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(file_path, <span class="at">flatten =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Stop if fewer than limit rows returned</span></span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(chunk_data) <span class="sc">&lt;</span> limit) <span class="cf">break</span></span>
 <span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine all chunks</span></span>
-<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a>  all_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(data_dir, <span class="at">pattern =</span> <span class="st">&quot;^trees_chunk_.*</span><span class="sc">\\</span><span class="st">.json$&quot;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a>  all_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">lapply</span>(all_files, <span class="cf">function</span>(f) <span class="fu">fromJSON</span>(f, <span class="at">flatten =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a>    offset <span class="ot">&lt;-</span> offset <span class="sc">+</span> limit</span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a>    chunk <span class="ot">&lt;-</span> chunk <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(all_data)</span>
-<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a>tree_data <span class="ot">&lt;-</span> <span class="fu">download_tree_chunks</span>()</span>
-<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine all chunks</span></span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a>  all_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(data_dir, <span class="at">pattern =</span> <span class="st">&quot;^trees_chunk_.*</span><span class="sc">\\</span><span class="st">.json$&quot;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>  all_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">lapply</span>(all_files, <span class="cf">function</span>(f) <span class="fu">fromJSON</span>(f, <span class="at">flatten =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(all_data)</span>
+<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a><span class="fu"># Plotting all Tree Points</span></span>
-<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a><span class="in">```{R}</span></span>
-<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
-<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract longitude and latitude from the list column</span></span>
-<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a>tree_data <span class="ot">&lt;-</span> tree_data <span class="sc">%&gt;%</span></span>
-<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a>    <span class="at">longitude =</span> <span class="fu">map_dbl</span>(location.coordinates, <span class="dv">1</span>),</span>
-<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a>    <span class="at">latitude  =</span> <span class="fu">map_dbl</span>(location.coordinates, <span class="dv">2</span>)</span>
-<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a>trees_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(tree_data, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>), <span class="at">crs =</span> <span class="dv">4326</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Council district boundaries (polygons)</span></span>
-<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> districts_wgs84, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
-<span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Tree points (dense, so use transparency and small size)</span></span>
-<span id="cb9-120"><a href="#cb9-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> trees_sf, <span class="at">color =</span> <span class="st">&quot;forestgreen&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">size =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb9-121"><a href="#cb9-121" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Minimal theme and labels</span></span>
-<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb9-124"><a href="#cb9-124" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;NYC Trees Overlaid on Council Districts&quot;</span>,</span>
-<span id="cb9-126"><a href="#cb9-126" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Each point represents a tree; boundaries show council districts&quot;</span>,</span>
-<span id="cb9-127"><a href="#cb9-127" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Source: NYC Open Data&quot;</span></span>
-<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a>trees_sample <span class="ot">&lt;-</span> trees_sf <span class="sc">%&gt;%</span> <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">100000</span>)</span>
-<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-132"><a href="#cb9-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-133"><a href="#cb9-133" aria-hidden="true" tabindex="-1"></a><span class="fu"># District Level Analyses on Trees</span></span>
-<span id="cb9-134"><a href="#cb9-134" aria-hidden="true" tabindex="-1"></a>Q1: District 50 with a total of 2536 trees has the most trees.</span>
-<span id="cb9-137"><a href="#cb9-137" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-138"><a href="#cb9-138" aria-hidden="true" tabindex="-1"></a><span class="co">#Joining Tree points and District Boundaries</span></span>
-<span id="cb9-139"><a href="#cb9-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-140"><a href="#cb9-140" aria-hidden="true" tabindex="-1"></a><span class="co"># Spatial join: tag each tree with the district it falls in</span></span>
-<span id="cb9-141"><a href="#cb9-141" aria-hidden="true" tabindex="-1"></a>trees_tagged <span class="ot">&lt;-</span> <span class="fu">st_join</span>(trees_sf, districts_wgs84, <span class="at">join =</span> st_intersects)</span>
-<span id="cb9-142"><a href="#cb9-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-143"><a href="#cb9-143" aria-hidden="true" tabindex="-1"></a><span class="co">#Counting Trees per District</span></span>
-<span id="cb9-144"><a href="#cb9-144" aria-hidden="true" tabindex="-1"></a>tree_counts <span class="ot">&lt;-</span> trees_tagged <span class="sc">%&gt;%</span></span>
-<span id="cb9-145"><a href="#cb9-145" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(CounDist, <span class="at">name =</span> <span class="st">&quot;tree_count&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-146"><a href="#cb9-146" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(tree_count))</span>
-<span id="cb9-147"><a href="#cb9-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-148"><a href="#cb9-148" aria-hidden="true" tabindex="-1"></a><span class="co">#District with most trees</span></span>
-<span id="cb9-149"><a href="#cb9-149" aria-hidden="true" tabindex="-1"></a>top_district <span class="ot">&lt;-</span> tree_counts <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="dv">1</span>)</span>
-<span id="cb9-150"><a href="#cb9-150" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(top_district)</span>
-<span id="cb9-151"><a href="#cb9-151" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-152"><a href="#cb9-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-153"><a href="#cb9-153" aria-hidden="true" tabindex="-1"></a>Q2: The Council District 50 with the shape area of 665199996 has the most tree density of 3.541792e-06.</span>
-<span id="cb9-156"><a href="#cb9-156" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-157"><a href="#cb9-157" aria-hidden="true" tabindex="-1"></a>trees_tagged <span class="ot">&lt;-</span> <span class="fu">st_join</span>(trees_sf, districts_wgs84, <span class="at">join =</span> st_intersects)</span>
-<span id="cb9-158"><a href="#cb9-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-159"><a href="#cb9-159" aria-hidden="true" tabindex="-1"></a>tree_counts <span class="ot">&lt;-</span> trees_tagged <span class="sc">%&gt;%</span></span>
-<span id="cb9-160"><a href="#cb9-160" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(CounDist, <span class="at">name =</span> <span class="st">&quot;tree_count&quot;</span>)</span>
-<span id="cb9-161"><a href="#cb9-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-162"><a href="#cb9-162" aria-hidden="true" tabindex="-1"></a>density_df <span class="ot">&lt;-</span> tree_counts <span class="sc">%&gt;%</span></span>
-<span id="cb9-163"><a href="#cb9-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
-<span id="cb9-164"><a href="#cb9-164" aria-hidden="true" tabindex="-1"></a>    districts_wgs84 <span class="sc">%&gt;%</span> <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span> <span class="fu">select</span>(CounDist, Shape_Area),</span>
-<span id="cb9-165"><a href="#cb9-165" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">&quot;CounDist&quot;</span></span>
-<span id="cb9-166"><a href="#cb9-166" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb9-167"><a href="#cb9-167" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tree_density =</span> tree_count <span class="sc">/</span> Shape_Area)</span>
-<span id="cb9-168"><a href="#cb9-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-169"><a href="#cb9-169" aria-hidden="true" tabindex="-1"></a>top_density <span class="ot">&lt;-</span> density_df <span class="sc">%&gt;%</span></span>
-<span id="cb9-170"><a href="#cb9-170" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(tree_density)) <span class="sc">%&gt;%</span></span>
-<span id="cb9-171"><a href="#cb9-171" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>)</span>
+<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>tree_data <span class="ot">&lt;-</span> <span class="fu">download_tree_chunks</span>()</span>
+<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a><span class="fu"># Plotting all Tree Points</span></span>
+<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a><span class="in">```{R}</span></span>
+<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract longitude and latitude from the list column</span></span>
+<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a>tree_data <span class="ot">&lt;-</span> tree_data <span class="sc">%&gt;%</span></span>
+<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a>    <span class="at">longitude =</span> <span class="fu">map_dbl</span>(location.coordinates, <span class="dv">1</span>),</span>
+<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a>    <span class="at">latitude  =</span> <span class="fu">map_dbl</span>(location.coordinates, <span class="dv">2</span>)</span>
+<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a>trees_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(tree_data, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>), <span class="at">crs =</span> <span class="dv">4326</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb9-120"><a href="#cb9-120" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Council district boundaries (polygons)</span></span>
+<span id="cb9-121"><a href="#cb9-121" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> districts_wgs84, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Tree points (dense, so use transparency and small size)</span></span>
+<span id="cb9-124"><a href="#cb9-124" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> trees_sf, <span class="at">color =</span> <span class="st">&quot;forestgreen&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">size =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-126"><a href="#cb9-126" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Minimal theme and labels</span></span>
+<span id="cb9-127"><a href="#cb9-127" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;NYC Trees Overlaid on Council Districts&quot;</span>,</span>
+<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Each point represents a tree; boundaries show council districts&quot;</span>,</span>
+<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Source: NYC Open Data&quot;</span></span>
+<span id="cb9-132"><a href="#cb9-132" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-133"><a href="#cb9-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-134"><a href="#cb9-134" aria-hidden="true" tabindex="-1"></a>trees_sample <span class="ot">&lt;-</span> trees_sf <span class="sc">%&gt;%</span> <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">100000</span>)</span>
+<span id="cb9-135"><a href="#cb9-135" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-136"><a href="#cb9-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-137"><a href="#cb9-137" aria-hidden="true" tabindex="-1"></a><span class="fu"># District Level Analyses on Trees</span></span>
+<span id="cb9-138"><a href="#cb9-138" aria-hidden="true" tabindex="-1"></a><span class="fu">## Q1: District 50 with a total of 2536 trees has the most trees.</span></span>
+<span id="cb9-141"><a href="#cb9-141" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-142"><a href="#cb9-142" aria-hidden="true" tabindex="-1"></a><span class="co">#Joining Tree points and District Boundaries</span></span>
+<span id="cb9-143"><a href="#cb9-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-144"><a href="#cb9-144" aria-hidden="true" tabindex="-1"></a><span class="co"># Spatial join: tag each tree with the district it falls in</span></span>
+<span id="cb9-145"><a href="#cb9-145" aria-hidden="true" tabindex="-1"></a>trees_tagged <span class="ot">&lt;-</span> <span class="fu">st_join</span>(trees_sf, districts_wgs84, <span class="at">join =</span> st_intersects)</span>
+<span id="cb9-146"><a href="#cb9-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-147"><a href="#cb9-147" aria-hidden="true" tabindex="-1"></a><span class="co">#Counting Trees per District</span></span>
+<span id="cb9-148"><a href="#cb9-148" aria-hidden="true" tabindex="-1"></a>tree_counts <span class="ot">&lt;-</span> trees_tagged <span class="sc">%&gt;%</span></span>
+<span id="cb9-149"><a href="#cb9-149" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(CounDist, <span class="at">name =</span> <span class="st">&quot;tree_count&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-150"><a href="#cb9-150" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(tree_count))</span>
+<span id="cb9-151"><a href="#cb9-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-152"><a href="#cb9-152" aria-hidden="true" tabindex="-1"></a><span class="co">#District with most trees</span></span>
+<span id="cb9-153"><a href="#cb9-153" aria-hidden="true" tabindex="-1"></a>top_district <span class="ot">&lt;-</span> tree_counts <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="dv">1</span>)</span>
+<span id="cb9-154"><a href="#cb9-154" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(top_district)</span>
+<span id="cb9-155"><a href="#cb9-155" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-156"><a href="#cb9-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-157"><a href="#cb9-157" aria-hidden="true" tabindex="-1"></a><span class="fu">## Q2: The Council District 50 with the shape area of 665199996 has the most tree density of 3.541792e-06.</span></span>
+<span id="cb9-160"><a href="#cb9-160" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-161"><a href="#cb9-161" aria-hidden="true" tabindex="-1"></a>trees_tagged <span class="ot">&lt;-</span> <span class="fu">st_join</span>(trees_sf, districts_wgs84, <span class="at">join =</span> st_intersects)</span>
+<span id="cb9-162"><a href="#cb9-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-163"><a href="#cb9-163" aria-hidden="true" tabindex="-1"></a>tree_counts <span class="ot">&lt;-</span> trees_tagged <span class="sc">%&gt;%</span></span>
+<span id="cb9-164"><a href="#cb9-164" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(CounDist, <span class="at">name =</span> <span class="st">&quot;tree_count&quot;</span>)</span>
+<span id="cb9-165"><a href="#cb9-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-166"><a href="#cb9-166" aria-hidden="true" tabindex="-1"></a>density_df <span class="ot">&lt;-</span> tree_counts <span class="sc">%&gt;%</span></span>
+<span id="cb9-167"><a href="#cb9-167" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb9-168"><a href="#cb9-168" aria-hidden="true" tabindex="-1"></a>    districts_wgs84 <span class="sc">%&gt;%</span> <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span> <span class="fu">select</span>(CounDist, Shape_Area),</span>
+<span id="cb9-169"><a href="#cb9-169" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">&quot;CounDist&quot;</span></span>
+<span id="cb9-170"><a href="#cb9-170" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb9-171"><a href="#cb9-171" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tree_density =</span> tree_count <span class="sc">/</span> Shape_Area)</span>
 <span id="cb9-172"><a href="#cb9-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-173"><a href="#cb9-173" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(top_density)</span>
-<span id="cb9-174"><a href="#cb9-174" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-175"><a href="#cb9-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-176"><a href="#cb9-176" aria-hidden="true" tabindex="-1"></a>Q3. District 15 has the highest fraction of dead trees with respect to all the districts.</span>
-<span id="cb9-179"><a href="#cb9-179" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-180"><a href="#cb9-180" aria-hidden="true" tabindex="-1"></a>trees_tagged <span class="ot">&lt;-</span> <span class="fu">st_join</span>(trees_sf, districts_wgs84, <span class="at">join =</span> st_intersects)</span>
-<span id="cb9-181"><a href="#cb9-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-182"><a href="#cb9-182" aria-hidden="true" tabindex="-1"></a><span class="co">#Dead and Total trees per district</span></span>
-<span id="cb9-183"><a href="#cb9-183" aria-hidden="true" tabindex="-1"></a>tree_death_stats <span class="ot">&lt;-</span> trees_tagged <span class="sc">%&gt;%</span></span>
-<span id="cb9-184"><a href="#cb9-184" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb9-185"><a href="#cb9-185" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CounDist) <span class="sc">%&gt;%</span></span>
-<span id="cb9-186"><a href="#cb9-186" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb9-187"><a href="#cb9-187" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_trees =</span> <span class="fu">n</span>(),</span>
-<span id="cb9-188"><a href="#cb9-188" aria-hidden="true" tabindex="-1"></a>    <span class="at">dead_trees =</span> <span class="fu">sum</span>(tpcondition <span class="sc">==</span> <span class="st">&quot;Dead&quot;</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb9-189"><a href="#cb9-189" aria-hidden="true" tabindex="-1"></a>    <span class="at">dead_fraction =</span> dead_trees <span class="sc">/</span> total_trees</span>
-<span id="cb9-190"><a href="#cb9-190" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb9-191"><a href="#cb9-191" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(dead_fraction))</span>
-<span id="cb9-192"><a href="#cb9-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-193"><a href="#cb9-193" aria-hidden="true" tabindex="-1"></a><span class="co">#District with the highest dead tree fraction</span></span>
-<span id="cb9-194"><a href="#cb9-194" aria-hidden="true" tabindex="-1"></a>top_dead_fraction <span class="ot">&lt;-</span> tree_death_stats <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="dv">1</span>)</span>
-<span id="cb9-195"><a href="#cb9-195" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(top_dead_fraction)</span>
-<span id="cb9-196"><a href="#cb9-196" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-197"><a href="#cb9-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-198"><a href="#cb9-198" aria-hidden="true" tabindex="-1"></a>Q4. The most common tree species in Manhattan is  Gleditsia triacanthos var. inermis - Thornless honeylocust.</span>
-<span id="cb9-201"><a href="#cb9-201" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-202"><a href="#cb9-202" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb9-203"><a href="#cb9-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-204"><a href="#cb9-204" aria-hidden="true" tabindex="-1"></a>trees_tagged <span class="ot">&lt;-</span> trees_tagged <span class="sc">%&gt;%</span></span>
-<span id="cb9-205"><a href="#cb9-205" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb9-206"><a href="#cb9-206" aria-hidden="true" tabindex="-1"></a>    <span class="at">borough =</span> <span class="fu">case_when</span>(</span>
-<span id="cb9-207"><a href="#cb9-207" aria-hidden="true" tabindex="-1"></a>      CounDist <span class="sc">&gt;=</span> <span class="dv">1</span>  <span class="sc">&amp;</span> CounDist <span class="sc">&lt;=</span> <span class="dv">10</span> <span class="sc">~</span> <span class="st">&quot;Manhattan&quot;</span>,</span>
-<span id="cb9-208"><a href="#cb9-208" aria-hidden="true" tabindex="-1"></a>      CounDist <span class="sc">&gt;=</span> <span class="dv">11</span> <span class="sc">&amp;</span> CounDist <span class="sc">&lt;=</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">&quot;Bronx&quot;</span>,</span>
-<span id="cb9-209"><a href="#cb9-209" aria-hidden="true" tabindex="-1"></a>      CounDist <span class="sc">&gt;=</span> <span class="dv">19</span> <span class="sc">&amp;</span> CounDist <span class="sc">&lt;=</span> <span class="dv">32</span> <span class="sc">~</span> <span class="st">&quot;Queens&quot;</span>,</span>
-<span id="cb9-210"><a href="#cb9-210" aria-hidden="true" tabindex="-1"></a>      CounDist <span class="sc">&gt;=</span> <span class="dv">33</span> <span class="sc">&amp;</span> CounDist <span class="sc">&lt;=</span> <span class="dv">48</span> <span class="sc">~</span> <span class="st">&quot;Brooklyn&quot;</span>,</span>
-<span id="cb9-211"><a href="#cb9-211" aria-hidden="true" tabindex="-1"></a>      CounDist <span class="sc">&gt;=</span> <span class="dv">49</span> <span class="sc">&amp;</span> CounDist <span class="sc">&lt;=</span> <span class="dv">51</span> <span class="sc">~</span> <span class="st">&quot;Staten Island&quot;</span>,</span>
-<span id="cb9-212"><a href="#cb9-212" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span></span>
-<span id="cb9-213"><a href="#cb9-213" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-214"><a href="#cb9-214" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-215"><a href="#cb9-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-216"><a href="#cb9-216" aria-hidden="true" tabindex="-1"></a>manhattan_trees <span class="ot">&lt;-</span> trees_tagged <span class="sc">%&gt;%</span></span>
-<span id="cb9-217"><a href="#cb9-217" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(borough <span class="sc">==</span> <span class="st">&quot;Manhattan&quot;</span>)</span>
-<span id="cb9-218"><a href="#cb9-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-219"><a href="#cb9-219" aria-hidden="true" tabindex="-1"></a>most_common_species <span class="ot">&lt;-</span> manhattan_trees <span class="sc">%&gt;%</span></span>
-<span id="cb9-220"><a href="#cb9-220" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(genusspecies, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-221"><a href="#cb9-221" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>)</span>
+<span id="cb9-173"><a href="#cb9-173" aria-hidden="true" tabindex="-1"></a>top_density <span class="ot">&lt;-</span> density_df <span class="sc">%&gt;%</span></span>
+<span id="cb9-174"><a href="#cb9-174" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(tree_density)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-175"><a href="#cb9-175" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>)</span>
+<span id="cb9-176"><a href="#cb9-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-177"><a href="#cb9-177" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(top_density)</span>
+<span id="cb9-178"><a href="#cb9-178" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-179"><a href="#cb9-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-180"><a href="#cb9-180" aria-hidden="true" tabindex="-1"></a><span class="fu">## Q3. District 15 has the highest fraction of dead trees with respect to all the districts.</span></span>
+<span id="cb9-183"><a href="#cb9-183" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-184"><a href="#cb9-184" aria-hidden="true" tabindex="-1"></a>trees_tagged <span class="ot">&lt;-</span> <span class="fu">st_join</span>(trees_sf, districts_wgs84, <span class="at">join =</span> st_intersects)</span>
+<span id="cb9-185"><a href="#cb9-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-186"><a href="#cb9-186" aria-hidden="true" tabindex="-1"></a><span class="co">#Dead and Total trees per district</span></span>
+<span id="cb9-187"><a href="#cb9-187" aria-hidden="true" tabindex="-1"></a>tree_death_stats <span class="ot">&lt;-</span> trees_tagged <span class="sc">%&gt;%</span></span>
+<span id="cb9-188"><a href="#cb9-188" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-189"><a href="#cb9-189" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CounDist) <span class="sc">%&gt;%</span></span>
+<span id="cb9-190"><a href="#cb9-190" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb9-191"><a href="#cb9-191" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_trees =</span> <span class="fu">n</span>(),</span>
+<span id="cb9-192"><a href="#cb9-192" aria-hidden="true" tabindex="-1"></a>    <span class="at">dead_trees =</span> <span class="fu">sum</span>(tpcondition <span class="sc">==</span> <span class="st">&quot;Dead&quot;</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb9-193"><a href="#cb9-193" aria-hidden="true" tabindex="-1"></a>    <span class="at">dead_fraction =</span> dead_trees <span class="sc">/</span> total_trees</span>
+<span id="cb9-194"><a href="#cb9-194" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb9-195"><a href="#cb9-195" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(dead_fraction))</span>
+<span id="cb9-196"><a href="#cb9-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-197"><a href="#cb9-197" aria-hidden="true" tabindex="-1"></a><span class="co">#District with the highest dead tree fraction</span></span>
+<span id="cb9-198"><a href="#cb9-198" aria-hidden="true" tabindex="-1"></a>top_dead_fraction <span class="ot">&lt;-</span> tree_death_stats <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="dv">1</span>)</span>
+<span id="cb9-199"><a href="#cb9-199" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(top_dead_fraction)</span>
+<span id="cb9-200"><a href="#cb9-200" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-201"><a href="#cb9-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-202"><a href="#cb9-202" aria-hidden="true" tabindex="-1"></a><span class="fu">## Q4. The most common tree species in Manhattan is  Gleditsia triacanthos var. inermis - Thornless honeylocust.</span></span>
+<span id="cb9-205"><a href="#cb9-205" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-206"><a href="#cb9-206" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb9-207"><a href="#cb9-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-208"><a href="#cb9-208" aria-hidden="true" tabindex="-1"></a>trees_tagged <span class="ot">&lt;-</span> trees_tagged <span class="sc">%&gt;%</span></span>
+<span id="cb9-209"><a href="#cb9-209" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb9-210"><a href="#cb9-210" aria-hidden="true" tabindex="-1"></a>    <span class="at">borough =</span> <span class="fu">case_when</span>(</span>
+<span id="cb9-211"><a href="#cb9-211" aria-hidden="true" tabindex="-1"></a>      CounDist <span class="sc">&gt;=</span> <span class="dv">1</span>  <span class="sc">&amp;</span> CounDist <span class="sc">&lt;=</span> <span class="dv">10</span> <span class="sc">~</span> <span class="st">&quot;Manhattan&quot;</span>,</span>
+<span id="cb9-212"><a href="#cb9-212" aria-hidden="true" tabindex="-1"></a>      CounDist <span class="sc">&gt;=</span> <span class="dv">11</span> <span class="sc">&amp;</span> CounDist <span class="sc">&lt;=</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">&quot;Bronx&quot;</span>,</span>
+<span id="cb9-213"><a href="#cb9-213" aria-hidden="true" tabindex="-1"></a>      CounDist <span class="sc">&gt;=</span> <span class="dv">19</span> <span class="sc">&amp;</span> CounDist <span class="sc">&lt;=</span> <span class="dv">32</span> <span class="sc">~</span> <span class="st">&quot;Queens&quot;</span>,</span>
+<span id="cb9-214"><a href="#cb9-214" aria-hidden="true" tabindex="-1"></a>      CounDist <span class="sc">&gt;=</span> <span class="dv">33</span> <span class="sc">&amp;</span> CounDist <span class="sc">&lt;=</span> <span class="dv">48</span> <span class="sc">~</span> <span class="st">&quot;Brooklyn&quot;</span>,</span>
+<span id="cb9-215"><a href="#cb9-215" aria-hidden="true" tabindex="-1"></a>      CounDist <span class="sc">&gt;=</span> <span class="dv">49</span> <span class="sc">&amp;</span> CounDist <span class="sc">&lt;=</span> <span class="dv">51</span> <span class="sc">~</span> <span class="st">&quot;Staten Island&quot;</span>,</span>
+<span id="cb9-216"><a href="#cb9-216" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span></span>
+<span id="cb9-217"><a href="#cb9-217" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-218"><a href="#cb9-218" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-219"><a href="#cb9-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-220"><a href="#cb9-220" aria-hidden="true" tabindex="-1"></a>manhattan_trees <span class="ot">&lt;-</span> trees_tagged <span class="sc">%&gt;%</span></span>
+<span id="cb9-221"><a href="#cb9-221" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(borough <span class="sc">==</span> <span class="st">&quot;Manhattan&quot;</span>)</span>
 <span id="cb9-222"><a href="#cb9-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-223"><a href="#cb9-223" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(most_common_species)</span>
-<span id="cb9-224"><a href="#cb9-224" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-225"><a href="#cb9-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-226"><a href="#cb9-226" aria-hidden="true" tabindex="-1"></a>Q5. The closest tree species to Baruch College Campus is  &quot;Pyrus calleryana - Callery pear&quot;.</span>
-<span id="cb9-229"><a href="#cb9-229" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-230"><a href="#cb9-230" aria-hidden="true" tabindex="-1"></a>new_st_point <span class="ot">&lt;-</span> <span class="cf">function</span>(lat, lon){</span>
-<span id="cb9-231"><a href="#cb9-231" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sfc</span>(<span class="fu">st_point</span>(<span class="fu">c</span>(lon, lat))) <span class="sc">|&gt;</span>  <span class="co"># Note: st_point expects (x = lon, y = lat)</span></span>
-<span id="cb9-232"><a href="#cb9-232" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_set_crs</span>(<span class="st">&quot;WGS84&quot;</span>)</span>
-<span id="cb9-233"><a href="#cb9-233" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-234"><a href="#cb9-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-235"><a href="#cb9-235" aria-hidden="true" tabindex="-1"></a>baruch_point <span class="ot">&lt;-</span> <span class="fu">new_st_point</span>(<span class="fl">40.7401</span>, <span class="sc">-</span><span class="fl">73.9836</span>)</span>
-<span id="cb9-236"><a href="#cb9-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-237"><a href="#cb9-237" aria-hidden="true" tabindex="-1"></a>trees_with_distance <span class="ot">&lt;-</span> trees_sf <span class="sc">%&gt;%</span></span>
-<span id="cb9-238"><a href="#cb9-238" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">distance =</span> <span class="fu">st_distance</span>(geometry, baruch_point))</span>
-<span id="cb9-239"><a href="#cb9-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-240"><a href="#cb9-240" aria-hidden="true" tabindex="-1"></a>closest_tree <span class="ot">&lt;-</span> trees_with_distance <span class="sc">%&gt;%</span></span>
-<span id="cb9-241"><a href="#cb9-241" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(distance) <span class="sc">%&gt;%</span></span>
-<span id="cb9-242"><a href="#cb9-242" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>)</span>
+<span id="cb9-223"><a href="#cb9-223" aria-hidden="true" tabindex="-1"></a>most_common_species <span class="ot">&lt;-</span> manhattan_trees <span class="sc">%&gt;%</span></span>
+<span id="cb9-224"><a href="#cb9-224" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(genusspecies, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-225"><a href="#cb9-225" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>)</span>
+<span id="cb9-226"><a href="#cb9-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-227"><a href="#cb9-227" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(most_common_species)</span>
+<span id="cb9-228"><a href="#cb9-228" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-229"><a href="#cb9-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-230"><a href="#cb9-230" aria-hidden="true" tabindex="-1"></a><span class="fu">## Q5. The closest tree species to Baruch College Campus is  &quot;Pyrus calleryana - Callery pear&quot;.</span></span>
+<span id="cb9-233"><a href="#cb9-233" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-234"><a href="#cb9-234" aria-hidden="true" tabindex="-1"></a>new_st_point <span class="ot">&lt;-</span> <span class="cf">function</span>(lat, lon){</span>
+<span id="cb9-235"><a href="#cb9-235" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sfc</span>(<span class="fu">st_point</span>(<span class="fu">c</span>(lon, lat))) <span class="sc">|&gt;</span>  <span class="co"># Note: st_point expects (x = lon, y = lat)</span></span>
+<span id="cb9-236"><a href="#cb9-236" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_set_crs</span>(<span class="st">&quot;WGS84&quot;</span>)</span>
+<span id="cb9-237"><a href="#cb9-237" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-238"><a href="#cb9-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-239"><a href="#cb9-239" aria-hidden="true" tabindex="-1"></a>baruch_point <span class="ot">&lt;-</span> <span class="fu">new_st_point</span>(<span class="fl">40.7401</span>, <span class="sc">-</span><span class="fl">73.9836</span>)</span>
+<span id="cb9-240"><a href="#cb9-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-241"><a href="#cb9-241" aria-hidden="true" tabindex="-1"></a>trees_with_distance <span class="ot">&lt;-</span> trees_sf <span class="sc">%&gt;%</span></span>
+<span id="cb9-242"><a href="#cb9-242" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">distance =</span> <span class="fu">st_distance</span>(geometry, baruch_point))</span>
 <span id="cb9-243"><a href="#cb9-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-244"><a href="#cb9-244" aria-hidden="true" tabindex="-1"></a>closest_species <span class="ot">&lt;-</span> closest_tree<span class="sc">$</span>genusspecies</span>
-<span id="cb9-245"><a href="#cb9-245" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(closest_species)</span>
-<span id="cb9-246"><a href="#cb9-246" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-244"><a href="#cb9-244" aria-hidden="true" tabindex="-1"></a>closest_tree <span class="ot">&lt;-</span> trees_with_distance <span class="sc">%&gt;%</span></span>
+<span id="cb9-245"><a href="#cb9-245" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(distance) <span class="sc">%&gt;%</span></span>
+<span id="cb9-246"><a href="#cb9-246" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>)</span>
 <span id="cb9-247"><a href="#cb9-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-248"><a href="#cb9-248" aria-hidden="true" tabindex="-1"></a><span class="fu"># Government Project Design</span></span>
-<span id="cb9-249"><a href="#cb9-249" aria-hidden="true" tabindex="-1"></a>Proposal: Forest Hills Trees Renewal &amp; Resilience Program</span>
-<span id="cb9-250"><a href="#cb9-250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-251"><a href="#cb9-251" aria-hidden="true" tabindex="-1"></a>Forest Hills (District 29) represents the optimal balance of need and opportunity. Unlike districts with sparse canopy or existing healthy forests, our neighborhood faces elevated mortality and stump hazards within a dense, historic canopy. Targeted investment here will deliver visible safety improvements and restore neighborhood character — making District 29 the most impactful choice for discretionary tree funding.</span>
-<span id="cb9-252"><a href="#cb9-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-253"><a href="#cb9-253" aria-hidden="true" tabindex="-1"></a>Forest Hills is known for its leafy and historic charm- but recent data shows a troubling rise in tree mortality and stump accumulation. This initiative will restore the neighborhood&#39;s green infrastructure while preparing it for tree friendly future.</span>
+<span id="cb9-248"><a href="#cb9-248" aria-hidden="true" tabindex="-1"></a>closest_species <span class="ot">&lt;-</span> closest_tree<span class="sc">$</span>genusspecies</span>
+<span id="cb9-249"><a href="#cb9-249" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(closest_species)</span>
+<span id="cb9-250"><a href="#cb9-250" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-251"><a href="#cb9-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-252"><a href="#cb9-252" aria-hidden="true" tabindex="-1"></a><span class="fu"># Government Project Design</span></span>
+<span id="cb9-253"><a href="#cb9-253" aria-hidden="true" tabindex="-1"></a>Proposal: Forest Hills Trees Renewal &amp; Resilience Program</span>
 <span id="cb9-254"><a href="#cb9-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-255"><a href="#cb9-255" aria-hidden="true" tabindex="-1"></a>Quantitative Scope of the Project</span>
-<span id="cb9-256"><a href="#cb9-256" aria-hidden="true" tabindex="-1"></a>Based on NYC Tree Census data and spatial analysis of District 29:</span>
-<span id="cb9-257"><a href="#cb9-257" aria-hidden="true" tabindex="-1"></a>Removal of 380 dead trees identified with a &quot;Dead&quot; condition in the tpcondition column.</span>
+<span id="cb9-255"><a href="#cb9-255" aria-hidden="true" tabindex="-1"></a>Forest Hills (District 29) represents the optimal balance of need and opportunity. Unlike districts with sparse canopy or existing healthy forests, our neighborhood faces elevated mortality and stump hazards within a dense, historic canopy. Targeted investment here will deliver visible safety improvements and restore neighborhood character — making District 29 the most impactful choice for discretionary tree funding.</span>
+<span id="cb9-256"><a href="#cb9-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-257"><a href="#cb9-257" aria-hidden="true" tabindex="-1"></a>Forest Hills is known for its leafy and historic charm- but recent data shows a troubling rise in tree mortality and stump accumulation. This initiative will restore the neighborhood&#39;s green infrastructure while preparing it for tree friendly future.</span>
 <span id="cb9-258"><a href="#cb9-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-259"><a href="#cb9-259" aria-hidden="true" tabindex="-1"></a>Replacement of 250 residual stumps with new plantings in high-foot-traffic areas</span>
-<span id="cb9-260"><a href="#cb9-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-261"><a href="#cb9-261" aria-hidden="true" tabindex="-1"></a>Planting of 1,200 new trees, prioritizing resilient species such as Ginkgo biloba, Quercus bicolor (Swamp White Oak), and Celtis occidentalis (Hackberry)</span>
+<span id="cb9-259"><a href="#cb9-259" aria-hidden="true" tabindex="-1"></a><span class="fu">## Quantitative Scope of the Project</span></span>
+<span id="cb9-260"><a href="#cb9-260" aria-hidden="true" tabindex="-1"></a>Based on NYC Tree Census data and spatial analysis of District 29:</span>
+<span id="cb9-261"><a href="#cb9-261" aria-hidden="true" tabindex="-1"></a>Removal of 380 dead trees identified with a &quot;Dead&quot; condition in the tpcondition column.</span>
 <span id="cb9-262"><a href="#cb9-262" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-263"><a href="#cb9-263" aria-hidden="true" tabindex="-1"></a>Maintenance of 1,500 existing trees with elevated  to prevent limb failure and improve public safety</span>
+<span id="cb9-263"><a href="#cb9-263" aria-hidden="true" tabindex="-1"></a>Replacement of 250 residual stumps with new plantings in high-foot-traffic areas.</span>
 <span id="cb9-264"><a href="#cb9-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-265"><a href="#cb9-265" aria-hidden="true" tabindex="-1"></a>#Visualization of Dead trees in my district:</span>
-<span id="cb9-268"><a href="#cb9-268" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-269"><a href="#cb9-269" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb9-270"><a href="#cb9-270" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb9-271"><a href="#cb9-271" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb9-272"><a href="#cb9-272" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-273"><a href="#cb9-273" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter to District 29 (Forest Hills)</span></span>
-<span id="cb9-274"><a href="#cb9-274" aria-hidden="true" tabindex="-1"></a>my_district <span class="ot">&lt;-</span> districts_wgs84 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(CounDist <span class="sc">==</span> <span class="dv">29</span>)</span>
-<span id="cb9-275"><a href="#cb9-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-276"><a href="#cb9-276" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter trees within District 29</span></span>
-<span id="cb9-277"><a href="#cb9-277" aria-hidden="true" tabindex="-1"></a>trees_in_district <span class="ot">&lt;-</span> trees_sf[my_district, ]</span>
-<span id="cb9-278"><a href="#cb9-278" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-279"><a href="#cb9-279" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset to dead trees and stumps (assuming tpcondition == &quot;Dead&quot; and stumpdiameter &gt; 0)</span></span>
-<span id="cb9-280"><a href="#cb9-280" aria-hidden="true" tabindex="-1"></a>project_trees <span class="ot">&lt;-</span> trees_in_district <span class="sc">%&gt;%</span></span>
-<span id="cb9-281"><a href="#cb9-281" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tpcondition <span class="sc">==</span> <span class="st">&quot;Dead&quot;</span> <span class="sc">|</span> stumpdiameter <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb9-265"><a href="#cb9-265" aria-hidden="true" tabindex="-1"></a>Planting of 1,200 new trees, prioritizing resilient species such as Ginkgo biloba, Quercus bicolor (Swamp White Oak), and Celtis occidentalis (Hackberry).</span>
+<span id="cb9-266"><a href="#cb9-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-267"><a href="#cb9-267" aria-hidden="true" tabindex="-1"></a>Maintenance of 1,500 existing trees with elevated  to prevent limb failure and improve public safety.</span>
+<span id="cb9-268"><a href="#cb9-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-269"><a href="#cb9-269" aria-hidden="true" tabindex="-1"></a><span class="fu"># Visualization of Dead trees in District 29:</span></span>
+<span id="cb9-272"><a href="#cb9-272" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-273"><a href="#cb9-273" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb9-274"><a href="#cb9-274" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb9-275"><a href="#cb9-275" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb9-276"><a href="#cb9-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-277"><a href="#cb9-277" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter to District 29 (Forest Hills)</span></span>
+<span id="cb9-278"><a href="#cb9-278" aria-hidden="true" tabindex="-1"></a>my_district <span class="ot">&lt;-</span> districts_wgs84 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(CounDist <span class="sc">==</span> <span class="dv">29</span>)</span>
+<span id="cb9-279"><a href="#cb9-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-280"><a href="#cb9-280" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter trees within District 29</span></span>
+<span id="cb9-281"><a href="#cb9-281" aria-hidden="true" tabindex="-1"></a>trees_in_district <span class="ot">&lt;-</span> trees_sf[my_district, ]</span>
 <span id="cb9-282"><a href="#cb9-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-283"><a href="#cb9-283" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the map</span></span>
-<span id="cb9-284"><a href="#cb9-284" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb9-285"><a href="#cb9-285" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> my_district, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb9-286"><a href="#cb9-286" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> project_trees, <span class="fu">aes</span>(<span class="at">color =</span> tpcondition), <span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">size =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
-<span id="cb9-287"><a href="#cb9-287" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;Dead&quot;</span> <span class="ot">=</span> <span class="st">&quot;red&quot;</span>, <span class="st">&quot;Other&quot;</span> <span class="ot">=</span> <span class="st">&quot;gray&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb9-288"><a href="#cb9-288" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">st_bbox</span>(my_district)[<span class="fu">c</span>(<span class="st">&quot;xmin&quot;</span>, <span class="st">&quot;xmax&quot;</span>)],</span>
-<span id="cb9-289"><a href="#cb9-289" aria-hidden="true" tabindex="-1"></a>           <span class="at">ylim =</span> <span class="fu">st_bbox</span>(my_district)[<span class="fu">c</span>(<span class="st">&quot;ymin&quot;</span>, <span class="st">&quot;ymax&quot;</span>)]) <span class="sc">+</span></span>
-<span id="cb9-290"><a href="#cb9-290" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb9-291"><a href="#cb9-291" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb9-292"><a href="#cb9-292" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Target Trees for Renewal: Forest Hills (District 29)&quot;</span>,</span>
-<span id="cb9-293"><a href="#cb9-293" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Dead trees and stumps prioritized for replacement&quot;</span>,</span>
-<span id="cb9-294"><a href="#cb9-294" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Source: NYC Open Data&quot;</span>,</span>
-<span id="cb9-295"><a href="#cb9-295" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;Tree Condition&quot;</span></span>
-<span id="cb9-296"><a href="#cb9-296" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-297"><a href="#cb9-297" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-298"><a href="#cb9-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-299"><a href="#cb9-299" aria-hidden="true" tabindex="-1"></a>Below quantitatively compares District 29 (Forest Hills) with three other Districts in the New York Metropolitan area, that being District 15 (Fordham/Belmont), District 34 (Bushwick/ Ridgewood), and District 50 (Staten Island).</span>
-<span id="cb9-300"><a href="#cb9-300" aria-hidden="true" tabindex="-1"></a>The code below represents 3 metrics of comparison that align with our proposal: tree density, mortality function (dead trees), and stump burden.</span>
-<span id="cb9-301"><a href="#cb9-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-302"><a href="#cb9-302" aria-hidden="true" tabindex="-1"></a>Based on the table below, District 29 (Forest Hills, Queens)</span>
-<span id="cb9-303"><a href="#cb9-303" aria-hidden="true" tabindex="-1"></a>contains a healthy density (0.99/km^2) - nearly five times higher than District 15 and comparable to District 34.</span>
-<span id="cb9-304"><a href="#cb9-304" aria-hidden="true" tabindex="-1"></a>Moreover, there are elevated mortality rates (32%) - significantly higher than District 34 and District 50, showing canopy stress.</span>
-<span id="cb9-305"><a href="#cb9-305" aria-hidden="true" tabindex="-1"></a>Lastly, there is substantial stump burden (0.16/km^2) - second only to Staten Island, indicating visible hazards and opportunities for quick replanting.</span>
-<span id="cb9-306"><a href="#cb9-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-309"><a href="#cb9-309" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-310"><a href="#cb9-310" aria-hidden="true" tabindex="-1"></a><span class="co"># Quantitative comparison of District 29 versus peer districts</span></span>
-<span id="cb9-311"><a href="#cb9-311" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------</span></span>
-<span id="cb9-312"><a href="#cb9-312" aria-hidden="true" tabindex="-1"></a><span class="co"># District 29 = Forest Hills (Queens)</span></span>
-<span id="cb9-313"><a href="#cb9-313" aria-hidden="true" tabindex="-1"></a><span class="co"># District 15 = Fordham / Belmont (Bronx)</span></span>
-<span id="cb9-314"><a href="#cb9-314" aria-hidden="true" tabindex="-1"></a><span class="co"># District 34 = Bushwick / Ridgewood (Brooklyn/Queens overlap)</span></span>
-<span id="cb9-315"><a href="#cb9-315" aria-hidden="true" tabindex="-1"></a><span class="co"># District 50 = Staten Island North Shore</span></span>
-<span id="cb9-316"><a href="#cb9-316" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-317"><a href="#cb9-317" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb9-318"><a href="#cb9-318" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb9-319"><a href="#cb9-319" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb9-320"><a href="#cb9-320" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forcats)</span>
-<span id="cb9-321"><a href="#cb9-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-322"><a href="#cb9-322" aria-hidden="true" tabindex="-1"></a><span class="co"># Project to local CRS for accurate area calculations</span></span>
-<span id="cb9-323"><a href="#cb9-323" aria-hidden="true" tabindex="-1"></a>districts_2263 <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(districts_wgs84, <span class="dv">2263</span>)</span>
-<span id="cb9-324"><a href="#cb9-324" aria-hidden="true" tabindex="-1"></a>trees_2263     <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(trees_sf, <span class="dv">2263</span>)</span>
+<span id="cb9-283"><a href="#cb9-283" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset to dead trees and stumps (assuming tpcondition == &quot;Dead&quot; and stumpdiameter &gt; 0)</span></span>
+<span id="cb9-284"><a href="#cb9-284" aria-hidden="true" tabindex="-1"></a>project_trees <span class="ot">&lt;-</span> trees_in_district <span class="sc">%&gt;%</span></span>
+<span id="cb9-285"><a href="#cb9-285" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tpcondition <span class="sc">==</span> <span class="st">&quot;Dead&quot;</span> <span class="sc">|</span> stumpdiameter <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb9-286"><a href="#cb9-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-287"><a href="#cb9-287" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the map</span></span>
+<span id="cb9-288"><a href="#cb9-288" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb9-289"><a href="#cb9-289" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> my_district, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb9-290"><a href="#cb9-290" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> project_trees, <span class="fu">aes</span>(<span class="at">color =</span> tpcondition), <span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">size =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb9-291"><a href="#cb9-291" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;Dead&quot;</span> <span class="ot">=</span> <span class="st">&quot;red&quot;</span>, <span class="st">&quot;Other&quot;</span> <span class="ot">=</span> <span class="st">&quot;gray&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb9-292"><a href="#cb9-292" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">st_bbox</span>(my_district)[<span class="fu">c</span>(<span class="st">&quot;xmin&quot;</span>, <span class="st">&quot;xmax&quot;</span>)],</span>
+<span id="cb9-293"><a href="#cb9-293" aria-hidden="true" tabindex="-1"></a>           <span class="at">ylim =</span> <span class="fu">st_bbox</span>(my_district)[<span class="fu">c</span>(<span class="st">&quot;ymin&quot;</span>, <span class="st">&quot;ymax&quot;</span>)]) <span class="sc">+</span></span>
+<span id="cb9-294"><a href="#cb9-294" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb9-295"><a href="#cb9-295" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb9-296"><a href="#cb9-296" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Target Trees for Renewal: Forest Hills (District 29)&quot;</span>,</span>
+<span id="cb9-297"><a href="#cb9-297" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Dead trees and stumps prioritized for replacement&quot;</span>,</span>
+<span id="cb9-298"><a href="#cb9-298" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Source: NYC Open Data&quot;</span>,</span>
+<span id="cb9-299"><a href="#cb9-299" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;Tree Condition&quot;</span></span>
+<span id="cb9-300"><a href="#cb9-300" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-301"><a href="#cb9-301" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-302"><a href="#cb9-302" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-303"><a href="#cb9-303" aria-hidden="true" tabindex="-1"></a>Below quantitatively compares District 29 (Forest Hills) with three other Districts in the New York Metropolitan area, that being District 15 (Fordham/Belmont), District 34 (Bushwick/ Ridgewood), and District 50 (Staten Island).</span>
+<span id="cb9-304"><a href="#cb9-304" aria-hidden="true" tabindex="-1"></a>The code below represents 3 metrics of comparison that align with our proposal: tree density, mortality function (dead trees), and stump burden.</span>
+<span id="cb9-305"><a href="#cb9-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-306"><a href="#cb9-306" aria-hidden="true" tabindex="-1"></a>Based on the table below, District 29 (Forest Hills, Queens)</span>
+<span id="cb9-307"><a href="#cb9-307" aria-hidden="true" tabindex="-1"></a>contains a healthy density (0.99/km^2) - nearly five times higher than District 15 and comparable to District 34.</span>
+<span id="cb9-308"><a href="#cb9-308" aria-hidden="true" tabindex="-1"></a>Moreover, there are elevated mortality rates (32%) - significantly higher than District 34 and District 50, showing canopy stress.</span>
+<span id="cb9-309"><a href="#cb9-309" aria-hidden="true" tabindex="-1"></a>Lastly, there is substantial stump burden (0.16/km^2) - second only to Staten Island, indicating visible hazards and opportunities for quick replanting.</span>
+<span id="cb9-310"><a href="#cb9-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-313"><a href="#cb9-313" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-314"><a href="#cb9-314" aria-hidden="true" tabindex="-1"></a><span class="co"># Quantitative comparison of District 29 versus peer districts</span></span>
+<span id="cb9-315"><a href="#cb9-315" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------</span></span>
+<span id="cb9-316"><a href="#cb9-316" aria-hidden="true" tabindex="-1"></a><span class="co"># District 29 = Forest Hills (Queens)</span></span>
+<span id="cb9-317"><a href="#cb9-317" aria-hidden="true" tabindex="-1"></a><span class="co"># District 15 = Fordham / Belmont (Bronx)</span></span>
+<span id="cb9-318"><a href="#cb9-318" aria-hidden="true" tabindex="-1"></a><span class="co"># District 34 = Bushwick / Ridgewood (Brooklyn/Queens overlap)</span></span>
+<span id="cb9-319"><a href="#cb9-319" aria-hidden="true" tabindex="-1"></a><span class="co"># District 50 = Staten Island North Shore</span></span>
+<span id="cb9-320"><a href="#cb9-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-321"><a href="#cb9-321" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb9-322"><a href="#cb9-322" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb9-323"><a href="#cb9-323" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb9-324"><a href="#cb9-324" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forcats)</span>
 <span id="cb9-325"><a href="#cb9-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-326"><a href="#cb9-326" aria-hidden="true" tabindex="-1"></a><span class="co"># Spatial join: tag each tree with district</span></span>
-<span id="cb9-327"><a href="#cb9-327" aria-hidden="true" tabindex="-1"></a>trees_tagged <span class="ot">&lt;-</span> <span class="fu">st_join</span>(trees_2263, districts_2263, <span class="at">join =</span> st_intersects)</span>
-<span id="cb9-328"><a href="#cb9-328" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-329"><a href="#cb9-329" aria-hidden="true" tabindex="-1"></a><span class="co"># District areas (km²)</span></span>
-<span id="cb9-330"><a href="#cb9-330" aria-hidden="true" tabindex="-1"></a>district_areas <span class="ot">&lt;-</span> districts_2263 <span class="sc">%&gt;%</span></span>
-<span id="cb9-331"><a href="#cb9-331" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">area_m2 =</span> <span class="fu">as.numeric</span>(<span class="fu">st_area</span>(geometry))) <span class="sc">%&gt;%</span></span>
-<span id="cb9-332"><a href="#cb9-332" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb9-333"><a href="#cb9-333" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(CounDist, <span class="at">area_km2 =</span> area_m2 <span class="sc">/</span> <span class="fl">1e6</span>)</span>
-<span id="cb9-334"><a href="#cb9-334" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-335"><a href="#cb9-335" aria-hidden="true" tabindex="-1"></a><span class="co"># Tree counts per district</span></span>
-<span id="cb9-336"><a href="#cb9-336" aria-hidden="true" tabindex="-1"></a>tree_counts <span class="ot">&lt;-</span> trees_tagged <span class="sc">%&gt;%</span></span>
-<span id="cb9-337"><a href="#cb9-337" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb9-338"><a href="#cb9-338" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(CounDist, <span class="at">name =</span> <span class="st">&quot;tree_count&quot;</span>)</span>
-<span id="cb9-339"><a href="#cb9-339" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-340"><a href="#cb9-340" aria-hidden="true" tabindex="-1"></a><span class="co"># Tree density per km²</span></span>
-<span id="cb9-341"><a href="#cb9-341" aria-hidden="true" tabindex="-1"></a>density_df <span class="ot">&lt;-</span> tree_counts <span class="sc">%&gt;%</span></span>
-<span id="cb9-342"><a href="#cb9-342" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(district_areas, <span class="at">by =</span> <span class="st">&quot;CounDist&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-343"><a href="#cb9-343" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tree_density_km2 =</span> tree_count <span class="sc">/</span> area_km2)</span>
-<span id="cb9-344"><a href="#cb9-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-345"><a href="#cb9-345" aria-hidden="true" tabindex="-1"></a><span class="co"># Mortality fraction (share of dead trees)</span></span>
-<span id="cb9-346"><a href="#cb9-346" aria-hidden="true" tabindex="-1"></a>mortality_df <span class="ot">&lt;-</span> trees_tagged <span class="sc">%&gt;%</span></span>
-<span id="cb9-347"><a href="#cb9-347" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb9-348"><a href="#cb9-348" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CounDist) <span class="sc">%&gt;%</span></span>
-<span id="cb9-349"><a href="#cb9-349" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb9-350"><a href="#cb9-350" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_trees =</span> <span class="fu">n</span>(),</span>
-<span id="cb9-351"><a href="#cb9-351" aria-hidden="true" tabindex="-1"></a>    <span class="at">dead_trees  =</span> <span class="fu">sum</span>(tpcondition <span class="sc">==</span> <span class="st">&quot;Dead&quot;</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb9-352"><a href="#cb9-352" aria-hidden="true" tabindex="-1"></a>    <span class="at">dead_fraction =</span> dead_trees <span class="sc">/</span> total_trees</span>
-<span id="cb9-353"><a href="#cb9-353" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb9-354"><a href="#cb9-354" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb9-355"><a href="#cb9-355" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-356"><a href="#cb9-356" aria-hidden="true" tabindex="-1"></a><span class="co"># Stump burden per km²</span></span>
-<span id="cb9-357"><a href="#cb9-357" aria-hidden="true" tabindex="-1"></a>stumps_df <span class="ot">&lt;-</span> trees_tagged <span class="sc">%&gt;%</span></span>
-<span id="cb9-358"><a href="#cb9-358" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb9-359"><a href="#cb9-359" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">is_stump =</span> <span class="fu">if_else</span>(<span class="sc">!</span><span class="fu">is.na</span>(stumpdiameter) <span class="sc">&amp;</span> stumpdiameter <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb9-360"><a href="#cb9-360" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CounDist) <span class="sc">%&gt;%</span></span>
-<span id="cb9-361"><a href="#cb9-361" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">stump_count =</span> <span class="fu">sum</span>(is_stump, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb9-362"><a href="#cb9-362" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb9-363"><a href="#cb9-363" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(district_areas, <span class="at">by =</span> <span class="st">&quot;CounDist&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-364"><a href="#cb9-364" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">stumps_per_km2 =</span> stump_count <span class="sc">/</span> area_km2)</span>
-<span id="cb9-365"><a href="#cb9-365" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-366"><a href="#cb9-366" aria-hidden="true" tabindex="-1"></a><span class="co"># Select comparison districts (with inline comments above)</span></span>
-<span id="cb9-367"><a href="#cb9-367" aria-hidden="true" tabindex="-1"></a>compare_dists <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">29</span>, <span class="dv">15</span>, <span class="dv">34</span>, <span class="dv">50</span>)</span>
-<span id="cb9-368"><a href="#cb9-368" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-369"><a href="#cb9-369" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine metrics into one table</span></span>
-<span id="cb9-370"><a href="#cb9-370" aria-hidden="true" tabindex="-1"></a>comparison_tbl <span class="ot">&lt;-</span> density_df <span class="sc">%&gt;%</span></span>
-<span id="cb9-371"><a href="#cb9-371" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(CounDist, tree_density_km2) <span class="sc">%&gt;%</span></span>
-<span id="cb9-372"><a href="#cb9-372" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(mortality_df <span class="sc">%&gt;%</span> <span class="fu">select</span>(CounDist, dead_fraction), <span class="at">by =</span> <span class="st">&quot;CounDist&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-373"><a href="#cb9-373" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(stumps_df <span class="sc">%&gt;%</span> <span class="fu">select</span>(CounDist, stumps_per_km2), <span class="at">by =</span> <span class="st">&quot;CounDist&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-374"><a href="#cb9-374" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(CounDist <span class="sc">%in%</span> compare_dists) <span class="sc">%&gt;%</span></span>
-<span id="cb9-375"><a href="#cb9-375" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(CounDist) <span class="sc">%&gt;%</span></span>
-<span id="cb9-376"><a href="#cb9-376" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Council_District =</span> CounDist)</span>
-<span id="cb9-377"><a href="#cb9-377" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-378"><a href="#cb9-378" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(comparison_tbl)</span>
-<span id="cb9-379"><a href="#cb9-379" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-380"><a href="#cb9-380" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-381"><a href="#cb9-381" aria-hidden="true" tabindex="-1"></a>Why District 29 is the Right Choice:</span>
-<span id="cb9-382"><a href="#cb9-382" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-383"><a href="#cb9-383" aria-hidden="true" tabindex="-1"></a>Unlike District 15 (too few trees) or District 50 (already strong canopy), Forest Hills combines moderate density with high mortality and stump accumulation.Stumps and dead trees are concentrated in walkable, historic blocks - making renewal high visible to reisdents and visitors. District 20 has enough existing canopy to benefit immediately from maintenance and replanting, but also enough vulnerability to justify urgent funding.</span>
+<span id="cb9-326"><a href="#cb9-326" aria-hidden="true" tabindex="-1"></a><span class="co"># Project to local CRS for accurate area calculations</span></span>
+<span id="cb9-327"><a href="#cb9-327" aria-hidden="true" tabindex="-1"></a>districts_2263 <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(districts_wgs84, <span class="dv">2263</span>)</span>
+<span id="cb9-328"><a href="#cb9-328" aria-hidden="true" tabindex="-1"></a>trees_2263     <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(trees_sf, <span class="dv">2263</span>)</span>
+<span id="cb9-329"><a href="#cb9-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-330"><a href="#cb9-330" aria-hidden="true" tabindex="-1"></a><span class="co"># Spatial join: tag each tree with district</span></span>
+<span id="cb9-331"><a href="#cb9-331" aria-hidden="true" tabindex="-1"></a>trees_tagged <span class="ot">&lt;-</span> <span class="fu">st_join</span>(trees_2263, districts_2263, <span class="at">join =</span> st_intersects)</span>
+<span id="cb9-332"><a href="#cb9-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-333"><a href="#cb9-333" aria-hidden="true" tabindex="-1"></a><span class="co"># District areas (km²)</span></span>
+<span id="cb9-334"><a href="#cb9-334" aria-hidden="true" tabindex="-1"></a>district_areas <span class="ot">&lt;-</span> districts_2263 <span class="sc">%&gt;%</span></span>
+<span id="cb9-335"><a href="#cb9-335" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">area_m2 =</span> <span class="fu">as.numeric</span>(<span class="fu">st_area</span>(geometry))) <span class="sc">%&gt;%</span></span>
+<span id="cb9-336"><a href="#cb9-336" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-337"><a href="#cb9-337" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(CounDist, <span class="at">area_km2 =</span> area_m2 <span class="sc">/</span> <span class="fl">1e6</span>)</span>
+<span id="cb9-338"><a href="#cb9-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-339"><a href="#cb9-339" aria-hidden="true" tabindex="-1"></a><span class="co"># Tree counts per district</span></span>
+<span id="cb9-340"><a href="#cb9-340" aria-hidden="true" tabindex="-1"></a>tree_counts <span class="ot">&lt;-</span> trees_tagged <span class="sc">%&gt;%</span></span>
+<span id="cb9-341"><a href="#cb9-341" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-342"><a href="#cb9-342" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(CounDist, <span class="at">name =</span> <span class="st">&quot;tree_count&quot;</span>)</span>
+<span id="cb9-343"><a href="#cb9-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-344"><a href="#cb9-344" aria-hidden="true" tabindex="-1"></a><span class="co"># Tree density per km²</span></span>
+<span id="cb9-345"><a href="#cb9-345" aria-hidden="true" tabindex="-1"></a>density_df <span class="ot">&lt;-</span> tree_counts <span class="sc">%&gt;%</span></span>
+<span id="cb9-346"><a href="#cb9-346" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(district_areas, <span class="at">by =</span> <span class="st">&quot;CounDist&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-347"><a href="#cb9-347" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tree_density_km2 =</span> tree_count <span class="sc">/</span> area_km2)</span>
+<span id="cb9-348"><a href="#cb9-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-349"><a href="#cb9-349" aria-hidden="true" tabindex="-1"></a><span class="co"># Mortality fraction (share of dead trees)</span></span>
+<span id="cb9-350"><a href="#cb9-350" aria-hidden="true" tabindex="-1"></a>mortality_df <span class="ot">&lt;-</span> trees_tagged <span class="sc">%&gt;%</span></span>
+<span id="cb9-351"><a href="#cb9-351" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-352"><a href="#cb9-352" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CounDist) <span class="sc">%&gt;%</span></span>
+<span id="cb9-353"><a href="#cb9-353" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb9-354"><a href="#cb9-354" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_trees =</span> <span class="fu">n</span>(),</span>
+<span id="cb9-355"><a href="#cb9-355" aria-hidden="true" tabindex="-1"></a>    <span class="at">dead_trees  =</span> <span class="fu">sum</span>(tpcondition <span class="sc">==</span> <span class="st">&quot;Dead&quot;</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb9-356"><a href="#cb9-356" aria-hidden="true" tabindex="-1"></a>    <span class="at">dead_fraction =</span> dead_trees <span class="sc">/</span> total_trees</span>
+<span id="cb9-357"><a href="#cb9-357" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb9-358"><a href="#cb9-358" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb9-359"><a href="#cb9-359" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-360"><a href="#cb9-360" aria-hidden="true" tabindex="-1"></a><span class="co"># Stump burden per km²</span></span>
+<span id="cb9-361"><a href="#cb9-361" aria-hidden="true" tabindex="-1"></a>stumps_df <span class="ot">&lt;-</span> trees_tagged <span class="sc">%&gt;%</span></span>
+<span id="cb9-362"><a href="#cb9-362" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-363"><a href="#cb9-363" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">is_stump =</span> <span class="fu">if_else</span>(<span class="sc">!</span><span class="fu">is.na</span>(stumpdiameter) <span class="sc">&amp;</span> stumpdiameter <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-364"><a href="#cb9-364" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CounDist) <span class="sc">%&gt;%</span></span>
+<span id="cb9-365"><a href="#cb9-365" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">stump_count =</span> <span class="fu">sum</span>(is_stump, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-366"><a href="#cb9-366" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-367"><a href="#cb9-367" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(district_areas, <span class="at">by =</span> <span class="st">&quot;CounDist&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-368"><a href="#cb9-368" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">stumps_per_km2 =</span> stump_count <span class="sc">/</span> area_km2)</span>
+<span id="cb9-369"><a href="#cb9-369" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-370"><a href="#cb9-370" aria-hidden="true" tabindex="-1"></a><span class="co"># Select comparison districts (with inline comments above)</span></span>
+<span id="cb9-371"><a href="#cb9-371" aria-hidden="true" tabindex="-1"></a>compare_dists <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">29</span>, <span class="dv">15</span>, <span class="dv">34</span>, <span class="dv">50</span>)</span>
+<span id="cb9-372"><a href="#cb9-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-373"><a href="#cb9-373" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine metrics into one table</span></span>
+<span id="cb9-374"><a href="#cb9-374" aria-hidden="true" tabindex="-1"></a>comparison_tbl <span class="ot">&lt;-</span> density_df <span class="sc">%&gt;%</span></span>
+<span id="cb9-375"><a href="#cb9-375" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(CounDist, tree_density_km2) <span class="sc">%&gt;%</span></span>
+<span id="cb9-376"><a href="#cb9-376" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(mortality_df <span class="sc">%&gt;%</span> <span class="fu">select</span>(CounDist, dead_fraction), <span class="at">by =</span> <span class="st">&quot;CounDist&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-377"><a href="#cb9-377" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(stumps_df <span class="sc">%&gt;%</span> <span class="fu">select</span>(CounDist, stumps_per_km2), <span class="at">by =</span> <span class="st">&quot;CounDist&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-378"><a href="#cb9-378" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(CounDist <span class="sc">%in%</span> compare_dists) <span class="sc">%&gt;%</span></span>
+<span id="cb9-379"><a href="#cb9-379" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(CounDist) <span class="sc">%&gt;%</span></span>
+<span id="cb9-380"><a href="#cb9-380" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Council_District =</span> CounDist)</span>
+<span id="cb9-381"><a href="#cb9-381" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-382"><a href="#cb9-382" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(comparison_tbl)</span>
+<span id="cb9-383"><a href="#cb9-383" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb9-384"><a href="#cb9-384" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-385"><a href="#cb9-385" aria-hidden="true" tabindex="-1"></a>#District Level Anaysis of District 29 and District 15:</span>
+<span id="cb9-385"><a href="#cb9-385" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why District 29 is the Right Choice:</span></span>
 <span id="cb9-386"><a href="#cb9-386" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-387"><a href="#cb9-387" aria-hidden="true" tabindex="-1"></a>The bar chart below shows the scale of each intervention in one glance not just planting new trees, but also rmeoving hazards, replacing stumps, and maintaining what works.</span>
+<span id="cb9-387"><a href="#cb9-387" aria-hidden="true" tabindex="-1"></a>Unlike District 15 (too few trees) or District 50 (already strong canopy), Forest Hills combines moderate density with high mortality and stump accumulation.Stumps and dead trees are concentrated in walkable, historic blocks - making renewal high visible to reisdents and visitors. District 20 has enough existing canopy to benefit immediately from maintenance and replanting, but also enough vulnerability to justify urgent funding.</span>
 <span id="cb9-388"><a href="#cb9-388" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-389"><a href="#cb9-389" aria-hidden="true" tabindex="-1"></a>This chart illustrates the strategic scope of our proposal: Forest Hills is not starting from scratch, but rather leveraging a mature canopy with targeted removals, rapid stump conversions, and over 1,000 new plantings. With 1,500 trees slated for proactive maintenance, this program ensures that renewal is paired with resilience — making District 29 the most impactful choice for urban forestry investment.</span>
+<span id="cb9-389"><a href="#cb9-389" aria-hidden="true" tabindex="-1"></a><span class="fu"># District Level Anaysis of District 29 and District 15:</span></span>
 <span id="cb9-390"><a href="#cb9-390" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-393"><a href="#cb9-393" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-394"><a href="#cb9-394" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb9-395"><a href="#cb9-395" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb9-396"><a href="#cb9-396" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-397"><a href="#cb9-397" aria-hidden="true" tabindex="-1"></a><span class="co"># Define project scope data</span></span>
-<span id="cb9-398"><a href="#cb9-398" aria-hidden="true" tabindex="-1"></a>project_scope <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb9-399"><a href="#cb9-399" aria-hidden="true" tabindex="-1"></a>  <span class="at">Action =</span> <span class="fu">c</span>(<span class="st">&quot;Remove Dead Trees&quot;</span>, <span class="st">&quot;Replace Stumps&quot;</span>, <span class="st">&quot;New Plantings&quot;</span>, <span class="st">&quot;Maintain Existing Trees&quot;</span>),</span>
-<span id="cb9-400"><a href="#cb9-400" aria-hidden="true" tabindex="-1"></a>  <span class="at">Count =</span> <span class="fu">c</span>(<span class="dv">380</span>, <span class="dv">250</span>, <span class="dv">1200</span>, <span class="dv">1500</span>),</span>
-<span id="cb9-401"><a href="#cb9-401" aria-hidden="true" tabindex="-1"></a>  <span class="at">Category =</span> <span class="fu">c</span>(<span class="st">&quot;Removals&quot;</span>, <span class="st">&quot;Replacements&quot;</span>, <span class="st">&quot;Plantings&quot;</span>, <span class="st">&quot;Maintenance&quot;</span>)</span>
-<span id="cb9-402"><a href="#cb9-402" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-403"><a href="#cb9-403" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-404"><a href="#cb9-404" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
-<span id="cb9-405"><a href="#cb9-405" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(project_scope, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> Count, <span class="at">fill =</span> Category)) <span class="sc">+</span></span>
-<span id="cb9-406"><a href="#cb9-406" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb9-407"><a href="#cb9-407" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
-<span id="cb9-408"><a href="#cb9-408" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(</span>
-<span id="cb9-409"><a href="#cb9-409" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Removals&quot;</span> <span class="ot">=</span> <span class="st">&quot;firebrick&quot;</span>,</span>
-<span id="cb9-410"><a href="#cb9-410" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Replacements&quot;</span> <span class="ot">=</span> <span class="st">&quot;goldenrod&quot;</span>,</span>
-<span id="cb9-411"><a href="#cb9-411" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Plantings&quot;</span> <span class="ot">=</span> <span class="st">&quot;forestgreen&quot;</span>,</span>
-<span id="cb9-412"><a href="#cb9-412" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Maintenance&quot;</span> <span class="ot">=</span> <span class="st">&quot;steelblue&quot;</span></span>
-<span id="cb9-413"><a href="#cb9-413" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span></span>
-<span id="cb9-414"><a href="#cb9-414" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb9-415"><a href="#cb9-415" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Scope of Forest Hills Tree Renewal Program&quot;</span>,</span>
-<span id="cb9-416"><a href="#cb9-416" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Quantitative breakdown of proposed actions in District 29&quot;</span>,</span>
-<span id="cb9-417"><a href="#cb9-417" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
-<span id="cb9-418"><a href="#cb9-418" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Number of Trees&quot;</span>,</span>
-<span id="cb9-419"><a href="#cb9-419" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Action Category&quot;</span>,</span>
-<span id="cb9-420"><a href="#cb9-420" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Source: NYC Tree Census and District 29 Analysis&quot;</span></span>
-<span id="cb9-421"><a href="#cb9-421" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb9-422"><a href="#cb9-422" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>)</span>
-<span id="cb9-423"><a href="#cb9-423" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-391"><a href="#cb9-391" aria-hidden="true" tabindex="-1"></a>The bar chart below shows the scale of each intervention in one glance not just planting new trees, but also removing hazards, replacing stumps, and maintaining what works.</span>
+<span id="cb9-392"><a href="#cb9-392" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-393"><a href="#cb9-393" aria-hidden="true" tabindex="-1"></a>This chart illustrates the strategic scope of our proposal: Forest Hills is not starting from scratch, but rather leveraging a mature canopy with targeted removals, rapid stump conversions, and over 1,000 new plantings. With 1,500 trees slated for proactive maintenance, this program ensures that renewal is paired with resilience — making District 29 the most impactful choice for urban forestry investment.</span>
+<span id="cb9-394"><a href="#cb9-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-397"><a href="#cb9-397" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-398"><a href="#cb9-398" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb9-399"><a href="#cb9-399" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb9-400"><a href="#cb9-400" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-401"><a href="#cb9-401" aria-hidden="true" tabindex="-1"></a><span class="co"># Define project scope data</span></span>
+<span id="cb9-402"><a href="#cb9-402" aria-hidden="true" tabindex="-1"></a>project_scope <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb9-403"><a href="#cb9-403" aria-hidden="true" tabindex="-1"></a>  <span class="at">Action =</span> <span class="fu">c</span>(<span class="st">&quot;Remove Dead Trees&quot;</span>, <span class="st">&quot;Replace Stumps&quot;</span>, <span class="st">&quot;New Plantings&quot;</span>, <span class="st">&quot;Maintain Existing Trees&quot;</span>),</span>
+<span id="cb9-404"><a href="#cb9-404" aria-hidden="true" tabindex="-1"></a>  <span class="at">Count =</span> <span class="fu">c</span>(<span class="dv">380</span>, <span class="dv">250</span>, <span class="dv">1200</span>, <span class="dv">1500</span>),</span>
+<span id="cb9-405"><a href="#cb9-405" aria-hidden="true" tabindex="-1"></a>  <span class="at">Category =</span> <span class="fu">c</span>(<span class="st">&quot;Removals&quot;</span>, <span class="st">&quot;Replacements&quot;</span>, <span class="st">&quot;Plantings&quot;</span>, <span class="st">&quot;Maintenance&quot;</span>)</span>
+<span id="cb9-406"><a href="#cb9-406" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-407"><a href="#cb9-407" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-408"><a href="#cb9-408" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb9-409"><a href="#cb9-409" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(project_scope, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> Count, <span class="at">fill =</span> Category)) <span class="sc">+</span></span>
+<span id="cb9-410"><a href="#cb9-410" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb9-411"><a href="#cb9-411" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb9-412"><a href="#cb9-412" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb9-413"><a href="#cb9-413" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Removals&quot;</span> <span class="ot">=</span> <span class="st">&quot;firebrick&quot;</span>,</span>
+<span id="cb9-414"><a href="#cb9-414" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Replacements&quot;</span> <span class="ot">=</span> <span class="st">&quot;goldenrod&quot;</span>,</span>
+<span id="cb9-415"><a href="#cb9-415" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Plantings&quot;</span> <span class="ot">=</span> <span class="st">&quot;forestgreen&quot;</span>,</span>
+<span id="cb9-416"><a href="#cb9-416" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Maintenance&quot;</span> <span class="ot">=</span> <span class="st">&quot;steelblue&quot;</span></span>
+<span id="cb9-417"><a href="#cb9-417" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb9-418"><a href="#cb9-418" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb9-419"><a href="#cb9-419" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Scope of Forest Hills Tree Renewal Program&quot;</span>,</span>
+<span id="cb9-420"><a href="#cb9-420" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Quantitative breakdown of proposed actions in District 29&quot;</span>,</span>
+<span id="cb9-421"><a href="#cb9-421" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb9-422"><a href="#cb9-422" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Number of Trees&quot;</span>,</span>
+<span id="cb9-423"><a href="#cb9-423" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Action Category&quot;</span>,</span>
+<span id="cb9-424"><a href="#cb9-424" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Source: NYC Tree Census and District 29 Analysis&quot;</span></span>
+<span id="cb9-425"><a href="#cb9-425" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb9-426"><a href="#cb9-426" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>)</span>
+<span id="cb9-427"><a href="#cb9-427" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
