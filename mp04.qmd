@@ -1,0 +1,668 @@
+---
+title: "Fact Checking BLS"
+author: "Sebastian Alejos"
+date: "`r Sys.Date()`"
+format: 
+  html: 
+    theme: journal
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    code-summary: "Show The Code"
+    embed-resources: true
+editor: visual
+execute: 
+  warning: false
+  message: false
+  echo: true
+  cache: false
+---
+
+## Task 1: Data Acquisition
+
+```{r}
+library(httr2)
+library(rvest)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(lubridate)
+library(purrr)
+
+# STEP 1 — Send POST request
+resp <- request("https://data.bls.gov/pdq/SurveyOutputServlet") %>%
+  req_method("POST") %>%
+  req_body_form(
+    request_action = "get_data",
+    reformat = "true",
+    from_results_page = "true",
+    from_year = "1979",
+    to_year = "2025",
+    initial_request = "false",
+    data_tool = "surveymost",
+    series_id = "CES0000000001",
+    original_annualAveragesRequested = "false"
+  ) %>%
+  req_perform()
+
+# STEP 2 — Extract table
+tbl <- resp_body_html(resp) %>%
+  html_elements("table") %>%
+  map(~ html_table(.x, fill = TRUE)) %>%
+  keep(~ ncol(.x) > 5) %>%
+  first()
+
+# STEP 3 — Clean + reshape
+df_levels <- tbl %>%
+  filter(str_detect(Year, "^[0-9]{4}$")) %>%        # keep only numeric years
+  mutate(Year = as.integer(Year)) %>%
+  pivot_longer(
+    cols = -Year,
+    names_to = "month",
+    values_to = "level"
+  ) %>%
+  mutate(
+    month = str_sub(month, 1, 3),                   # abbreviations like Jan, Feb
+    month_num = match(month, month.abb),            # convert to numeric month
+    date  = make_date(Year, month_num, 1),          # build proper Date
+    level = as.numeric(str_replace_all(level, ",", ""))
+  ) %>%
+  drop_na(date, level) %>%
+  arrange(date) %>%
+  select(date, level)
+
+df_levels
+```
+
+## Task 2: Data Cleaning
+
+```{r}
+# ---- Load packages ----
+library(httr2)
+library(rvest)
+library(dplyr)
+library(purrr)
+library(stringr)
+library(lubridate)
+
+# ---- Request page using realistic browser headers ----
+resp <- request("https://www.bls.gov/web/empsit/cesnaicsrev.htm") %>%
+  req_headers(
+    "user-agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "accept-language" = "en-US,en;q=0.5",
+    "cache-control" = "no-cache",
+    "referer" = "https://www.bls.gov/web/empsit/cesnaicsrev.htm"
+  ) %>%
+  req_perform()
+
+html <- resp_body_html(resp)
+
+# ---- Extraction function with dynamic format handling ----
+extract_year <- function(year, html) {
+  
+  tbl_node <- html %>% html_element(paste0("#", year))
+  
+  if (inherits(tbl_node, "xml_missing")) {
+    return(tibble(
+      Date = as.Date(character()),
+      Original = numeric(),
+      Final = numeric(),
+      Revision = numeric()
+    ))
+  }
+  
+  tbl <- tbl_node %>%
+    html_element("tbody") %>%
+    html_table(fill = TRUE, header = FALSE) %>%
+    slice(1:12) %>%
+    select(month = 1, Original = 3, Final = 5) %>%
+    mutate(
+      Original = as.numeric(gsub("[^0-9-]", "", Original)),
+      Final    = as.numeric(gsub("[^0-9-]", "", Final)),
+      Date     = ym(paste(year, month)),
+      Revision = Final - Original
+    ) %>%
+    select(Date, Original, Final, Revision)
+  
+  return(tbl)
+}
+
+# ---- Detect Available Year Tables ----
+available_years <- html %>%
+  html_elements("table") %>%
+  html_attr("id") %>%
+  suppressWarnings(as.numeric()) %>%
+  na.omit() %>%
+  sort()
+
+# ---- Apply Function to Each Year ----
+df_revisions <- map_df(available_years, extract_year, html = html)
+
+# ---- Final Results ----
+df_revisions
+```
+
+## Task 3: Data Merging and Exploration
+
+```{r}
+df_joined <- df_levels %>%
+  left_join(df_revisions, by = c("date" = "Date"))
+```
+
+# Largest Revisions Positive and Negative in CES History
+
+Largest Positive revision was on November 2021 with a positive of 347 points. Largest negative revision was on March 2020 with a negative of 672 points.
+
+```{r}
+# Largest positive revision
+largest_pos <- df_joined %>%
+  filter(!is.na(Revision)) %>%
+  slice_max(Revision, n = 1, with_ties = FALSE)
+
+# Largest negative revision
+largest_neg <- df_joined %>%
+  filter(!is.na(Revision)) %>%
+  slice_min(Revision, n = 1, with_ties = FALSE)
+
+largest_pos
+largest_neg
+```
+
+The Timeline scatter emphasizes when these extreme revisions happened.
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Combine the two extreme points
+extremes <- bind_rows(
+  largest_pos %>% mutate(type = "Largest Positive"),
+  largest_neg %>% mutate(type = "Largest Negative")
+)
+
+# Create a label column with clean formatting
+extremes <- extremes %>%
+  mutate(label = paste0(Revision, ": ", type))
+
+# Plot
+ggplot(extremes, aes(x = date, y = Revision, color = type)) +
+  geom_point(size = 5) +
+  geom_text(aes(label = label), vjust = -1.2, fontface = "bold") +
+  scale_color_manual(values = c("Largest Positive" = "#2C7FB8", "Largest Negative" = "#D95F0E")) +
+  scale_y_continuous(limits = c(min(extremes$Revision) - 50 , max(extremes$Revision) + 50)) +
+  labs(
+    title = "Extreme CES Revisions Highlighted",
+    x = "Date",
+    y = "Revision (Jobs)",
+    color = "Revision Type"
+  ) +
+  theme_minimal()
+```
+
+Average revision magnitude (Average and percent of level)
+
+Average absolute revision is about 56 thousand jobs. This mean on average, the monthly CES estimate is later revised by 56,600 jobs.
+
+Average percent revision: about 0.048% of the employment level. Revisions are typically very small relative to the overall size of the labor market less than one-twentieth of one percent.
+
+Revisions are noticable in raw counts but proportionally modest.
+
+```{r}
+avg_stats <- df_joined %>%
+  mutate(
+    abs_revision = abs(Revision),
+    pct_revision = abs(Revision) / level
+  ) %>%
+  summarise(
+    avg_abs_revision = mean(abs_revision, na.rm = TRUE),
+    avg_pct_revision = mean(pct_revision, na.rm = TRUE)
+  )
+
+avg_stats
+```
+
+Visualizing the Average Revision Magnitude
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(scales)
+
+# Create a summary tibble
+avg_stats <- tibble(
+  Metric = c("Average Absolute Revision", "Average Percent Revision"),
+  Value = c(56629.23, 0.0004809862)
+)
+
+# Format labels for display
+avg_stats <- avg_stats %>%
+  mutate(
+    Display = c("56,629 jobs", "0.048%"),
+    Metric = factor(Metric, levels = c("Average Absolute Revision", "Average Percent Revision"))
+  )
+
+# Plot
+ggplot(avg_stats, aes(x = Metric, y = Value, fill = Metric)) +
+  geom_col(width = 0.6, show.legend = FALSE) +
+  geom_text(aes(label = Display), vjust = -0.5, fontface = "bold") +
+  scale_y_continuous(
+    labels = comma,
+    limits = c(0, max(avg_stats$Value) * 1.2)
+  ) +
+  scale_fill_manual(values = c("#2C7FB8", "#FDBF6F")) +
+  labs(
+    title = "CES Revision Magnitude: Raw vs Relative",
+    x = NULL,
+    y = "Magnitude"
+  ) +
+  theme_minimal()
+```
+
+# Median Absolute Revision by Decade
+
+The y-axis displays the median absolute revision in jobs - the middle value of monthly revision magnitudes (ignoring direction). Whereas the x-axis represents the decades starting from 1970s til the 2020s.
+
+Based on the line graph we see that revisions are clearly largest during the 1970s (median of approx. 97 thousand jobs). The time frame between the 1980s to 2010s there was a steady decline in revision size, reaching a low of ~29 thousand jobs in the 2010s. The 2020s had increased revisions again with a median of approx. 49 thousand jobs.
+
+The decline of the 2010s suggests improved initial accuracy in CES estimates over time. The uptick of the 2020s reflects the pandemic-related volatility or possible structural data collection methods.
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+# Step 1: Create decade variable and compute median absolute revision
+median_decade <- df_joined %>%
+  filter(!is.na(Revision)) %>%
+  mutate(
+    abs_revision = abs(Revision),
+    decade = paste0(floor(lubridate::year(date) / 10) * 10, "s")
+  ) %>%
+  group_by(decade) %>%
+  summarise(median_abs_revision = median(abs_revision, na.rm = TRUE)) %>%
+  ungroup() %>%
+  mutate(decade = factor(decade, levels = sort(unique(decade))))
+
+# Step 2: Plot
+ggplot(median_decade, aes(x = decade, y = median_abs_revision, group = 1)) +
+  geom_line(color = "#2C7FB8", linewidth = 1) +
+  geom_point(color = "#2C7FB8", size = 3) +
+  geom_text(aes(label = round(median_abs_revision, 1)), vjust = -0.8, fontface = "bold") +
+  labs(
+    title = "Median CES Revision by Decade",
+    subtitle = "Absolute revision magnitude (Final − Original), 1979–present",
+    x = "Decade",
+    y = "Median Absolute Revision (jobs)"
+  ) +
+  theme_minimal()
+```
+
+# Time Series Model on the Fraction of Positive Revisions
+
+The time series model demonstrates how often monthly employment revisions were in an upward trend across the past 45 years. Precisely the green line with dots shows yearly fraction of months with upward revisions. While the blue line shows the smoothed trend using LOESS (Locally Estimated Scatterplot Smoothing - creating a parametric technique that draws smooth curves through noisy data) showing long term shifts. The Dashed line represents a 50% neutral benchmark above means upward revisions dominate.
+
+Early Volatility (1979-1990s): The fraction fluctuates widely throughout this period, often dipping below 50%. This suggests inconsistent directional bias - CES revisions were just as likely to subtract jobs as add them.
+
+Stabilization and upward bias (2000s-2010s): The smoothed trend rises above 50% and stays there. An indication of systemic upward bias, final estimates more often revised upward. This could potentially reflect cautious initial reporting or structural improvements in data collection.
+
+Pandemic Disruption (2020-2021): A sharp dip in the fraction
+
+```{r}
+library(dplyr)
+library(lubridate)
+
+frac_year <- df_joined %>%
+  filter(!is.na(Revision)) %>%
+  mutate(year = year(date)) %>%
+  group_by(year) %>%
+  summarise(frac_positive = mean(Revision > 0, na.rm = TRUE)) %>%
+  ungroup()
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(scales)
+
+# Assuming frac_year has columns: year, frac_positive
+ggplot(frac_year, aes(x = year, y = frac_positive)) +
+  # Raw yearly line
+  geom_line(color = "#31A354", linewidth = 0.8, alpha = 0.6) +
+  
+  # Add points for each year
+  geom_point(color = "#31A354", size = 1.5) +
+  
+  # Add a smooth trend line (loess)
+  geom_smooth(method = "loess", span = 0.3, color = "#08519C", fill = "#9ecae1") +
+  
+  # Add horizontal reference line at 50%
+  geom_hline(yintercept = 0.5, linetype = "dashed", color = "grey40") +
+  
+  # Labels and formatting
+  labs(
+    title = "Fraction of Positive CES Revisions by Year",
+    subtitle = "Annual fraction of months with upward revisions, 1979–present",
+    x = "Year",
+    y = "Fraction Positive",
+    caption = "Green line = yearly values; Blue curve = smoothed trend"
+  ) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    plot.subtitle = element_text(color = "grey30"),
+    plot.caption = element_text(size = 9, color = "grey40")
+  )
+```
+
+## Task 4: Statisical Inference
+
+# Has the fraction of negative revisions increased post-2000?
+
+Pre-2000 proportion of negative revisions (pro 1) \~ 40.5% Post-2000 proportion of negative revisions (prop 2) \~ 44.0% The p-value is far above the 0.05 statistical threshold. Although the raw proportion of negative revisions is slightly higher after 2000, the difference shows not statistically significant. There is no evidence of negative CES revisions has increased post-2000 in a statistically meaningful manner.
+
+```{r}
+df_joined <- df_joined %>%
+  mutate(year = lubridate::year(date))
+
+pre2000 <- sum(df_joined$Revision < 0 & df_joined$year < 2000, na.rm = TRUE)
+pre2000_n <- sum(df_joined$year < 2000, na.rm = TRUE)
+
+post2000 <- sum(df_joined$Revision < 0 & df_joined$year >= 2000, na.rm = TRUE)
+post2000_n <- sum(df_joined$year >= 2000, na.rm = TRUE)
+
+prop_test_neg <- prop.test(c(pre2000, post2000), c(pre2000_n, post2000_n))
+prop_test_neg
+```
+
+# Has the fraction of revisions \>1% increased post 2020?
+
+Based on the results of the 2 prop test, there are no months before or after 2020 in which CES revisions exceeded 1% of the unemployment level. The fratcion of revisions greater than 1% did not increase post 2020.
+
+```{r}
+df_joined <- df_joined %>%
+  mutate(pct_revision = abs(Revision) / level)
+
+pre2020 <- sum(df_joined$pct_revision > 0.01 & df_joined$year < 2020, na.rm = TRUE)
+pre2020_n <- sum(df_joined$year < 2020, na.rm = TRUE)
+
+post2020 <- sum(df_joined$pct_revision > 0.01 & df_joined$year >= 2020, na.rm = TRUE)
+post2020_n <- sum(df_joined$year >= 2020, na.rm = TRUE)
+
+prop_test_pct <- prop.test(c(pre2020, post2020), c(pre2020_n, post2020_n))
+prop_test_pct
+```
+
+# Is the average revision significantly different from zero?
+
+The test below shows that the average CES revision statistically significantly different from zero. On average, monthly revisions are positive, meaning the final employment estimates tend to be higher than the original preliminary release.
+
+The confidence interval that the true mean revision is between about +4,600 and +18,400 jobs.
+
+While the magnitude is modest relative to the total employment level, the direction is clear: revisions generally add jobs rather than subtract them.
+
+The CES exhibits a small but statistically significant upward bias in revisions over the past 45 years.
+
+```{r}
+t_test_zero <- t.test(df_joined$Revision, mu = 0)
+t_test_zero
+```
+
+# Has the average revision increased post-2020?
+
+Based on the Welch Two Sample T Test, there is no evidence that the average CES revision increased post 2020. The p -value of 0.475 is greater than the statistically significant threshold . The confidence interval is wide including both negative and positive values, representing the true difference being either a decrease, an increase or no change at all.
+
+```{r}
+pre2020_vals <- df_joined$Revision[df_joined$year < 2020]
+post2020_vals <- df_joined$Revision[df_joined$year >= 2020]
+
+t_test_post2020 <- t.test(post2020_vals, pre2020_vals)
+t_test_post2020
+```
+
+# Are revisions larger when CES changes are larger?
+
+Both the group comparison and the correlation test point share a common outcome: Larger underlying employment changes are associated with larger revisions. The effect is statistically significant, though the correlations is moderate rather than strong. This suggest that months with big swings in CES estimates are more prone to larger adjustments when revised.
+
+```{r}
+df_joined <- df_joined %>%
+  arrange(date) %>%
+  mutate(level_change = level - dplyr::lag(level),
+         abs_change = abs(level_change),
+         abs_revision = abs(Revision))
+
+# Define large change threshold
+threshold <- quantile(df_joined$abs_change, 0.75, na.rm = TRUE)
+
+df_joined <- df_joined %>%
+  mutate(change_group = if_else(abs_change >= threshold, "large", "not"))
+
+# Two-sample t-test
+t_test_large_change <- t.test(abs_revision ~ change_group, data = df_joined)
+t_test_large_change
+
+# Correlation test
+cor_test <- cor.test(df_joined$abs_change, df_joined$abs_revision, use = "complete.obs")
+cor_test
+```
+
+# Task 5
+
+# Comments from Trump regaridng the CES Revisions
+
+On August of 2024, Trump boasted on his platform truth social a "massive scandal" in which the Biden-Harris Administration had manipulated the jobs report indicating the CES revision of the BLS revised a total of 818,000 jobs downward. While these were preliminary numbers, Trump maintained his resolution that partisan interests had inflated the actual numbers. The agency publushed the final number indicating a smaller decrease of 589,000 rather than the one initially found.
+
+Based on Politifact: "None of these were close in scale to the 800,000 or 900,000 figures that Trump repeated. The revisions released in November 2024, for the September and October 2024 employment data, ranged from a decrease in 15,000 jobs to a gain of 49,000 jobs. The revisions released in December 2024, for the October and November 2024 employment data, were all increases ranging from 16,000 to 67,000 jobs."
+
+The “818,000” figure refers to an annual benchmark preliminary estimate announced in August 2024, not a partisan manipulation after the election; the final benchmark came in at 598,000. Monthly revisions around Nov–Dec 2024 were small (tens of thousands), not hundreds of thousands.
+
+Benchmark Stats summarizes the revisions acorss the benchmark window (Apr 2023 - Mar 2024) to illustrate the scale similar to BLS benchmark discussion.
+
+```{r}
+library(dplyr)
+library(lubridate)
+
+# Assumes df_joined has columns: date (Date), Original (numeric), Final (numeric), Revision (numeric)
+# Revision should be Final - Original per month.
+
+benchmark_window <- df_joined %>%
+  filter(date >= as.Date("2023-04-01"), date <= as.Date("2024-03-31"))
+
+benchmark_stats <- benchmark_window %>%
+  summarise(
+    total_revision = sum(Revision, na.rm = TRUE),
+    mean_monthly_revision = mean(Revision, na.rm = TRUE),
+    mean_abs_monthly_revision = mean(abs(Revision), na.rm = TRUE),
+    n_months = n()
+  )
+
+benchmark_stats
+```
+
+Key Takeaway from the benchmark Statistics: Based on the table total revisions (Apr 2023 - Mar 2024 window): - 362,000 jobs (revisions summed to a net downward adjustment of 362k)
+
+Mean monthly revision: - 30,167 jobs (on average each in month in that window was revised downward by about 30K)
+
+Claimed preliminary revision by Trump: 818,000 (Aug 2024), final benchmark of 598,000 (Feb 2025). The computed revision - 362,000 total. The computation confirms the downward revisions occurred, but the scale is far below the 800k -900k figures claimed by Trump.
+
+# Graph Comparing the Claimed vs Actual Revisions:
+
+The visual representation below demonstrates the claimed preliminary (818k) the figure Trump cited. The Final benchmark (598k), and the computer benchmark proxy (362k) reinforces the statement that the true adjustment was far below 800k-900k claimed. Monthly revisions near the election were modest at best, supporting the claim trump made overstated routine changes.
+
+```{r}
+library(ggplot2)
+
+# Comparison dataset (treat negative as magnitude for clarity)
+revision_compare <- data.frame(
+  Category = c("Claimed Preliminary (Trump)", 
+               "Final Benchmark (BLS)", 
+               "Computed Benchmark (Apr23-Mar24)", 
+               "Nov 2024 Monthly Revisions", 
+               "Dec 2024 Monthly Revisions"),
+  Value = c(818000, 598000, abs(-362000), 49000, 67000)
+)
+
+# Plot
+ggplot(revision_compare, aes(x = Category, y = Value, fill = Category)) +
+  geom_col(width = 0.6, show.legend = FALSE) +
+  geom_text(aes(label = scales::comma(Value)), vjust = -0.5, fontface = "bold") +
+  scale_fill_manual(values = c("#2C7FB8", "#08519C", "#D95F0E", "#31A354", "#FDBF6F")) +
+  scale_y_continuous(
+    limits = c(0, max(revision_compare$Value) * 1.2),  # zoom fit
+    labels = scales::comma
+  ) +
+  geom_hline(yintercept = 0, linetype = "solid", color = "black") +  # reference line at 0
+  labs(
+    title = "CES Revisions: Claimed vs Actual",
+    subtitle = "Comparing Trump’s claim (818k) with BLS benchmark and actual monthly revisions",
+    x = NULL,
+    y = "Jobs Revised"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    axis.text.x = element_text(angle = 20, hjust = 1)
+  )
+```
+
+# Job reports have gone up since the firing of Dr. McEntarfer
+
+For Reference Dr. McEntarfer was fired on August 1st, 2025.
+
+Statistics used: We observe an upward movement in mean, median, and fraction-positive. Quantively speaking the output results show are weak due to the "after" sample and high pre-period variance.
+
+The mean, median, and fraction positive all moved upward suggesting the monthly jobs report increased after Dr. McEntarfer left.
+
+Nonetheless, given that it has only been 9 months after his firing and a very high pre-period variance, one cannot confidently attribute the change to the firing. We will proceed with the hypothesis testing to verify the validatity of the statement.
+
+```{r}
+library(dplyr)
+library(lubridate)
+
+# --- User input: set the event date here ---
+event_date <- as.Date("2024-10-01")  # replace with the actual date
+
+# Assumes df_joined has columns:
+# - date (Date)
+# - level (employment level, in thousands)
+# - Original, Final 
+# We compute monthly change from level (Final preferred if available)
+
+# 1) Choose the best series to measure monthly changes
+df_series <- df_joined %>%
+  mutate(level_use = coalesce(Final, level, Original)) %>%
+  arrange(date)
+
+# 2) Compute monthly changes
+df_changes <- df_series %>%
+  arrange(date) %>%
+  mutate(monthly_change = level_use - dplyr::lag(level_use)) %>%
+  filter(!is.na(monthly_change)) %>%
+  mutate(period = if_else(date > event_date, "After", "Before"))
+
+# 3) Key statistics by period:
+stats_by_period <- df_changes %>%
+  group_by(period) %>%
+  summarise(
+    n_months = n(),
+    mean_monthly_change = mean(monthly_change, na.rm = TRUE),
+    median_monthly_change = median(monthly_change, na.rm = TRUE),
+    sd_monthly_change = sd(monthly_change, na.rm = TRUE),
+    frac_positive_months = mean(monthly_change > 0, na.rm = TRUE)
+  ) %>%
+  ungroup()
+
+stats_by_period
+```
+
+Hypothesis Test
+
+Below a Welch two-sample t-test compares the mean monthly job changes before vs after the firing.
+
+Additionally, a two-sample proportion test compares the fraction of positive months before vs after the firing.
+
+Interpretation Welch Test:
+
+Although the after-period mean is slightly higher, the p-value (0.48) is far above the statistical threshold of 0.05. The confidence interval includes large negative values, meaning we cannot rule the true difference is zero or even negative. Thus, statistically, there is no evidence that average monthly jobs changes increased after the event.
+
+Interpretation Two-Sample Prop Test:
+
+The after-period shows a higher fraction of positive months, however, as before the p-value (0.57) indicates this difference is not statistically significant.The confidence interval is wide, reflecting the sample size.
+
+```{r}
+# Prepare vectors for tests
+changes_before <- df_changes %>% filter(period == "Before") %>% pull(monthly_change)
+changes_after  <- df_changes %>% filter(period == "After")  %>% pull(monthly_change)
+
+# 1) Difference in means: two-sample t-test
+# H0: mean_before == mean_after
+# H1: mean_after > mean_before (monthly gains increased)
+ttest_result <- t.test(changes_after, changes_before, alternative = "greater", var.equal = FALSE)
+ttest_result
+
+# 2) Difference in proportions: fraction of positive months
+# H0: p_before == p_after
+# H1: p_after > p_before (higher share of positive months after)
+pos_before <- sum(changes_before > 0, na.rm = TRUE)
+pos_after  <- sum(changes_after > 0, na.rm = TRUE)
+n_before   <- length(changes_before)
+n_after    <- length(changes_after)
+
+prop_result <- prop.test(
+  x = c(pos_before, pos_after),
+  n = c(n_before, n_after),
+  alternative = "greater",
+  correct = TRUE
+)
+prop_result
+```
+
+Visualization of Before vs After: Employment Change Magnitude and Positivity:
+
+The chart below compares two key metrics between the "Before" and "After" periods surrounding a the firing of Dr. McEntarfer
+
+Mean monthly change (depicted on the left): Supports the claim that employment gains increased after the event. However, the difference is modest in magnitude and not statistically significant (shown by t-test with p = 0.48).
+
+Fraction of Positive Months: There is a mild improvement in consistency of job gains. However, the prop-test (p = 0.57) shows this difference as not statistically significant.
+
+```{r}
+library(ggplot2)
+library(scales)
+
+# 1) Monthly changes over time with event line
+ggplot(df_changes, aes(x = date, y = monthly_change)) +
+  geom_col(fill = "#2C7FB8", alpha = 0.7) +
+  geom_hline(yintercept = 0, color = "black") +
+  geom_vline(xintercept = event_date, linetype = "dashed", color = "#D95F0E") +
+  labs(
+    title = "Monthly Employment Changes with Event Marker",
+    subtitle = paste("Event date:", event_date),
+    x = "Date",
+    y = "Monthly change (thousands of jobs)"
+  ) +
+  theme_minimal()
+
+# 2) Before vs After comparison of key statistics
+stats_long <- stats_by_period %>%
+  select(period, mean_monthly_change, frac_positive_months) %>%
+  tidyr::pivot_longer(-period, names_to = "metric", values_to = "value") %>%
+  mutate(
+    metric = recode(metric,
+                    mean_monthly_change = "Mean monthly change",
+                    frac_positive_months = "Fraction positive months"),
+    value = abs(value)   # ensure no negative values
+  )
+
+ggplot(stats_long, aes(x = metric, y = value, fill = period)) +
+  geom_col(position = position_dodge(width = 0.6), width = 0.6) +
+  geom_hline(yintercept = 0, linetype = "solid", color = "black") +  # reference line at 0
+  scale_y_continuous(labels = comma, limits = c(0, max(stats_long$value) * 1.2)) +
+  scale_fill_manual(values = c("Before" = "#9ecae1", "After" = "#2C7FB8")) +
+  labs(
+    title = "Before vs After: Employment Change Magnitude and Positivity",
+    x = NULL,
+    y = "Value (absolute)"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5))
+```
