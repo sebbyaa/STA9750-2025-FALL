@@ -1,0 +1,871 @@
+---
+title: "Final Individual Summary Report"
+author: "Sebastian Alejos"
+date: "`r Sys.Date()`"
+format: 
+  html: 
+    theme: journal
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    code-summary: "Show The Code"
+    embed-resources: true
+editor: visual
+execute: 
+  warning: false
+  message: false
+  echo: true
+  cache: false
+---
+
+# 1. Introduction and Motivation
+
+Housing quality and housing insecurity are persistent challenges in New York City where aging buildings and socioeconomic inequality intersect. Public complaint systems—particularly NYC’s 311 system—are often used as proxies for housing stress, tenant hardship, and neighborhood-level distress. However, complaint data capture not only underlying housing conditions, but also residents’ ability, willingness, and opportunity to report problems.
+
+The overarching research question motivating this project asks: To what extent do neighborhood income levels influence the spatial distribution, types, and resolution outcomes of housing complaints in New York City? My analysis focuses on a specific supporting question within that broader inquiry: Are housing complaints more concentrated in lower-income neighborhoods?
+
+A common assumption in housing policy discourse is that poorer neighborhoods necessarily experience higher volumes of housing complaints, reflecting worse housing conditions. While this may be true in terms of structural deficiencies, complaint data are not a direct measure of conditions; they are a measure of reported problems. Understanding whether complaint concentration aligns with income levels therefore requires careful normalization, spatial analysis, and interpretation.
+
+The data acquired is the 2023 data from multiple NYC Open Data sources combined with American Community Survey (ACS) demographic information. By integrating complaint records with census tract–level income data and normalizing complaint counts by both housing units and population, this study differences between housing stress and reporting behavior. The goal is to assess whether lower-income neighborhoods disproportionately account for reported housing issues once appropriate controls are applied.
+
+# 2. Data Sources and Acquisition
+
+## American Community Survey (ACS)
+
+Neighborhood socioeconomic characteristics are drawn from the 2023 ACS 5-year estimates, accessed programmatically via the "tidycensus" package. Data are collected at the census tract level, which provides a balance between spatial granularity and statistical reliability.
+
+The following variables are used:
+
+-   Median household income
+
+-   Total population
+
+-   Total housing units
+
+-   Rent burden indicator
+
+Census tracts are spatially represented as polygons and reprojected into a standard geographic coordinate system (EPSG: 4326) to enable spatial joins with point-based complaint data.
+
+ACS data serve two critical roles in the analysis. First, median household income is the key independent variable used to classify neighborhoods and construct income quintiles. Second, population and housing unit counts are used to normalize complaint volumes, allowing for fair comparison across tracts of very different sizes and densities.
+
+```{r}
+# Load Required Libraries & Define ACS Variables
+
+# Load core libraries for ACS and data manipulation
+library(tidycensus)
+library(tidyverse)
+library(sf)
+
+# Define ACS variables we will pull: income, rent burden, housing units, population
+vars <- c(
+  income        = "B19013_001E",
+  rent_burden   = "B25070_001E",
+  housing_units = "B25002_001E",
+  population    = "B01003_001E"
+)
+
+# NYCâ€™s five counties (boroughs)
+nyc_counties <- c("New York", "Kings", "Queens", "Bronx", "Richmond")
+
+# Pull ACS (American Community Survey) Data for All NYC Census Tracts
+acs_tracts_sf <- get_acs(
+  geography = "tract",
+  variables = vars,
+  year      = 2023,
+  survey    = "acs5",
+  state     = "NY",
+  county    = nyc_counties,
+  output    = "wide",
+  key       = "8511c605b287c092b9895c821043632a80c83008",
+  geometry  = TRUE   # <-- important
+) %>%
+  st_transform(4326) # match lat/lon CRS
+
+head(acs_tracts_sf)
+```
+
+## NYC 311 Housing Complaints
+
+Housing complaints are drawn from the NYC 311 Service Requests dataset, accessed through the Socrata Open Data API using the RSocrata package. Records are limited to complaints created during calendar year 2023 to maintain temporal consistency with ACS estimates and other HPD and DOB datasets.
+
+The 311 records include:
+
+-   Complaint type and descriptor
+
+-   Creation and closure timestamps
+
+-   Incident address and ZIP code
+
+-   Latitude and longitude coordinates
+
+Complaint records are cleaned to standardize column names, parse date fields, and extract time-based features such as year, month, and day of week. Records lacking valid geographic coordinates are excluded from spatial analyses, as they cannot be reliably assigned to census tracts. The 311 dataset is the primary source used to measure reported housing complaints. My analysis focuses on housing-related complaints, including issues such as heat and hot water, maintenance, and habitability concerns.
+
+```{r}
+# install.packages("devtools")
+# devtools::install_github("Chicago/RSocrata")
+# Load libraries for scraping NYC Open Data via Socrata API
+library("RSocrata")
+library(janitor)
+library(lubridate)
+library(dplyr)
+
+# NYC Open Data application token
+app_token <- "ExUt22WiPiJvXNo3ZwPuIUDuC"
+
+# Build the API URL to pull 311 complaints for all of 2023
+url_311 <- paste0(
+  "https://data.cityofnewyork.us/resource/erm2-nwe9.json?",
+  "$select=unique_key,created_date,closed_date,complaint_type,descriptor,",
+  "incident_address,incident_zip,borough,latitude,longitude",
+  "&$where=created_date >= '2023-01-01T00:00:00' ",
+  "AND created_date < '2024-01-01T00:00:00'",
+  "&$limit=50000"
+)
+
+# Download 311 data, clean names, and create date-based variables
+nyc311 <- read.socrata(url_311, app_token = app_token) %>%
+  clean_names() %>%
+  mutate(
+    created_date = ymd_hms(created_date),
+    closed_date  = ymd_hms(closed_date),
+    date         = as_date(created_date),
+    year         = year(created_date),
+    month        = month(created_date),
+    dow          = wday(created_date, label = TRUE)
+  )
+
+
+head(nyc311)
+```
+
+## Downloading & Cleaning DOB (Department of Buildings) Complaints (2023)
+
+To contextualize 311 complaints within the broader enforcement ecosystem, the analysis also incorporates: Housing Preservation and Development (HPD) violations, filtered to Class A, B, and C violations issued in 2023 & Department of Buildings (DOB) complaints, also filtered to 2023.
+
+While these datasets are not the primary focus of the supporting question, they inform interpretation by distinguishing between resident-reported complaints and formal inspection or enforcement actions. HPD data are cleaned by parsing multiple date fields, constructing Borough–Block–Lot (BBL) identifiers, and filtering to valid records with complete geographic information.
+
+```{r}
+# NYC Open Data application token
+app_token <- "ExUt22WiPiJvXNo3ZwPuIUDuC"
+
+# DOB complaint dataset (CSV format from NYC Open Data)
+url_dob <- "https://data.cityofnewyork.us/resource/vztk-gaf7.csv?$limit=50000"
+
+dob_raw <- read.socrata(url_dob, app_token = app_token)
+
+# Clean DOB data: fix timestamps, parse dates, create address
+dob_clean <- dob_raw %>%
+  clean_names() %>%
+  mutate(
+    date_entered     = mdy(date_entered),
+    inspection_date  = mdy(inspection_date),
+    disposition_date = mdy(disposition_date),
+    
+    # Fix: dobrundate is stored as large integer representing Unix milliseconds
+    dobrundate = as.POSIXct(dobrundate / 1000,
+                            origin = "1970-01-01",
+                            tz = "UTC"),
+    # Create additional time fields + a unified full address string
+    date  = date_entered,
+    year  = year(date_entered),
+    month = month(date_entered),
+    dow   = wday(date_entered, label = TRUE),
+    full_address = paste0(house_number, " ", house_street, ", NY ", zip_code)
+  )
+
+# Filter DOB complaints to 2023 only
+dob_complaints_2023 <- dob_clean %>%
+  filter(
+    !is.na(date),
+    date >= as.Date("2023-01-01"),
+    date < as.Date("2024-01-01")
+  ) %>%
+  select(
+    complaint_number,
+    status,
+    date_entered,
+    inspection_date,
+    disposition_date,
+    full_address,
+    complaint_category,
+    year, month, dow
+  )
+
+nrow(dob_complaints_2023)
+head(dob_complaints_2023)
+```
+
+# 3. Data Cleaning, Processing, and Integration
+
+## Temporal and Spatial Consistency
+
+A key design choice in my analysis is restricting all datasets to the year 2023. Doing so avoids inconsistencies that arise when complaint data and socioeconomic data are drawn from mismatched time periods. While ACS 5-year estimates reflect conditions averaged over multiple years, using the most recent available ACS release ensures reasonable temporal alignment.
+
+Spatial integration is performed at the census tract level. Individual 311 complaints are converted to spatial point objects and joined to tract polygons using a within-geometry spatial join. This step assigns each complaint a unique tract GEOID, enabling aggregation and normalization.
+
+```{r}
+# ============================================================
+# Load packages for NYC Open Data (HPD, 311, DOB) and wrangling
+#    - RSocrata: access NYC Open Data via API
+#    - janitor: clean column names
+#    - lubridate: handle dates/times
+#    - dplyr: data manipulation
+# ============================================================
+
+# install.packages("devtools")
+# devtools::install_github("Chicago/RSocrata")
+library("RSocrata")
+library(janitor)
+library(lubridate)
+library(dplyr)
+
+# NYC Open Data app token (used by RSocrata API calls)
+app_token <- "ExUt22WiPiJvXNo3ZwPuIUDuC"
+
+
+# ============================================================
+# HPD Violations: Download & clean Housing Preservation & Development data
+#    - Pull up to 100,000 rows of HPD violations
+#    - Parse dates, build BBL, derive basic time fields (year, month, dow)
+# ============================================================
+
+
+url_hpd <- "https://data.cityofnewyork.us/resource/wvxf-dwi5.csv?$limit=100000"
+
+hpd_raw <- read.socrata(url_hpd, app_token = app_token)
+
+names(hpd_raw)
+
+hpd_clean <- hpd_raw %>%
+  clean_names() %>%
+  mutate(
+    # Parse all relevant date columns
+    novissueddate           = ymd(novissueddate),
+    inspectiondate          = ymd(inspectiondate),
+    approveddate            = ymd(approveddate),
+    originalcertifybydate   = ymd(originalcertifybydate),
+    originalcorrectbydate   = ymd(originalcorrectbydate),
+    newcertifybydate        = ymd(newcertifybydate),
+    newcorrectbydate        = ymd(newcorrectbydate),
+    certifieddate           = ymd(certifieddate),
+    currentstatusdate       = ymd(currentstatusdate),
+    
+    # Use NOV issued date as the main event date
+    date  = novissueddate,
+    year  = year(date),
+    month = month(date),
+    dow   = wday(date, label = TRUE),
+    
+    # Convert Boro/Block/Lot to integers (suppress parsing warnings)
+    boroid = suppressWarnings(as.integer(boroid)),
+    block  = suppressWarnings(as.integer(block)),
+    lot    = suppressWarnings(as.integer(lot)),
+    
+    # Build BBL as a zero-padded string: [boro][block][lot]
+    bbl = if_else(
+      !is.na(boroid) & !is.na(block) & !is.na(lot),
+      sprintf("%01d%05d%04d", boroid, block, lot),
+      NA_character_
+    )
+  )
+
+
+# ============================================================
+# Filter HPD violations to 2023 & valid records
+#    - Keep only class A/B/C violations with non-missing BBL and borough
+# ============================================================
+
+
+hpd_filtered <- hpd_clean %>%
+  filter(
+    !is.na(date),
+    date >= as.Date("2023-01-01"),
+    date <  as.Date("2024-01-01"),
+    class %in% c("A", "B", "C"),
+    !is.na(bbl),
+    !is.na(boro)
+  )
+```
+
+## Address-Level Aggregation
+
+Before tract-level aggregation, complaint and enforcement data are also aggregated at the address level. A standardized full_address field is constructed for each dataset to support joins across 311, DOB, and HPD records. This allows the analysis to capture how multiple reporting systems intersect at the same physical locations. Address-level aggregation is particularly important for understanding whether high complaint volumes reflect repeated reporting at a small number of problematic buildings versus widespread issues across many locations.
+
+```{r}
+# ============================================================
+# Aggregate HPD violations by BBL + Class
+#    - hpd_by_bbl_class: counts and dates per BBLâ€“class combination
+# ============================================================
+
+hpd_by_bbl_class <- hpd_filtered %>%
+  group_by(bbl, class) %>%
+  summarize(
+    n_violations = n(),
+    first_date   = min(date, na.rm = TRUE),
+    last_date    = max(date, na.rm = TRUE),
+    n_buildings  = n_distinct(buildingid),
+    .groups      = "drop"
+  )
+
+# ============================================================
+# Aggregate HPD violations by BBL + Class + address
+#    - Capture one canonical address per BBLâ€“class
+#    - Build full_address string for joining to 311/DOB
+# ============================================================
+
+hpd_by_bbl_class_addr <- hpd_filtered %>%
+  arrange(date) %>%
+  group_by(bbl, class) %>%
+  summarize(
+    boro         = first(boro),
+    housenumber  = first(housenumber),
+    streetname   = first(streetname),
+    zip          = first(zip),
+    novdescription = first(novdescription),
+    n_violations = n(),
+    first_date   = min(date, na.rm = TRUE),
+    last_date    = max(date, na.rm = TRUE),
+    .groups      = "drop"
+  ) %>%
+  mutate(
+    full_address = paste0(housenumber, " ", streetname, ", ", boro, " NY ", zip)
+  )
+
+head(hpd_by_bbl_class_addr)
+```
+
+```{r}
+# ============================================================
+# Address-level joins: 311, DOB, HPD
+#    - Goal: Build a unified address table with counts from all three sources
+# ============================================================
+
+library(dplyr)
+library(janitor)
+library(lubridate)
+
+# Construct full_address for 311 and aggregate by address
+nyc3112 <- nyc311 %>%
+  mutate(
+    full_address = paste0(incident_address, ", NY ", incident_zip)
+  )
+
+addr_311 <- nyc3112 %>%
+  group_by(full_address) %>%
+  summarize(
+    n_311      = n(),
+    n_311_heat = sum(complaint_type == "HEAT/HOT WATER", na.rm = TRUE),
+    first_311  = min(date, na.rm = TRUE),
+    last_311   = max(date, na.rm = TRUE),
+    .groups    = "drop"
+  )
+
+# Aggregate DOB complaints by address (from dob_complaints_2023)
+addr_dob <- dob_complaints_2023 %>%
+  group_by(full_address) %>%
+  summarize(
+    n_dob          = n(),
+    n_dob_open     = sum(status != "CLOSED", na.rm = TRUE),
+    median_res_dob = median(disposition_date - date_entered, na.rm = TRUE),
+    .groups        = "drop"
+  )
+
+# Join 311 and DOB at the address level
+addr_311_dob <- addr_311 %>%
+  left_join(addr_dob, by = "full_address")
+
+# Add HPD counts at the address level
+addr_311_dob_hpd <- addr_311_dob %>%
+  left_join(
+    hpd_by_bbl_class_addr %>%
+      group_by(full_address) %>%
+      summarize(
+        n_hpd   = n(),
+        n_hpd_c = sum(class == "C", na.rm = TRUE),
+        .groups = "drop"
+      ),
+    by = "full_address"
+  )
+```
+
+## Normalization and Derived Metrics
+
+Raw complaint counts are insufficient for meaningful comparison. Two primary normalization strategies are used:
+
+Complaints per 1,000 housing units, capturing the intensity of complaints relative to the housing stock
+
+Complaints per 1,000 residents, capturing reporting frequency relative to population
+
+Both metrics are computed at the census tract level. Tracts with extremely small populations or very low housing unit counts are filtered out to avoid unstable rates driven by small denominators.
+
+In addition, census tracts are grouped into income quintiles based on median household income. This facilitates comparison across the income distribution while avoiding arbitrary income thresholds.
+
+```{r}
+# ============================================================
+# Tract-level story: join point-based 311 data to census tracts
+#    - Convert 311 complaints to sf points
+#    - Spatially join to ACS tract polygons
+#    - Aggregate up to tract level for SQ1â€“SQ4 & SQ6
+# ============================================================
+library(sf)
+library(dplyr)
+
+# Convert 311 complaints to point geometry
+nyc311_sf <- nyc311 %>%
+  filter(!is.na(longitude), !is.na(latitude)) %>%
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
+
+# Spatial join: attach tract GEOID to each 311 complaint
+nyc311_with_tract <- st_join(
+  nyc311_sf,
+  acs_tracts_sf %>% select(GEOID),
+  join = st_within
+)
+
+# Aggregate 311 counts by census tract
+tract_311 <- nyc311_with_tract %>%
+  st_drop_geometry() %>%
+  group_by(GEOID) %>%
+  summarize(
+    n_311      = n(),
+    n_311_heat = sum(complaint_type == "HEAT/HOT WATER", na.rm = TRUE),
+    .groups    = "drop"
+  )
+
+# Merge ACS tract attributes with 311 tract-level counts
+tract_311_acs <- acs_tracts_sf %>%
+  left_join(tract_311, by = "GEOID")
+```
+
+# 4. Exploratory Data Analysis and Visualization
+
+## Spatial Distribution of Complaint Density
+
+The first set of visualizations examines the spatial distribution of housing complaints across New York City. Choropleth maps of complaint density per 1,000 housing units reveal clear geographic clustering.
+
+High complaint densities appear in parts of the Bronx and northern Brooklyn—areas that tend to have older housing stock and higher proportions of renters. When normalized by housing units, these neighborhoods stand out as areas of concentrated housing stress.
+
+However, when complaint density is normalized by population rather than housing units, the spatial pattern changes. Several higher-income areas, including parts of Manhattan and Queens, show elevated complaint rates per capita. This contrast highlights how different normalization strategies emphasize different underlying processes.
+
+```{r}
+# ============================================================
+# SQ1 Setup: Are housing complaints more concentrated in lower-income neighborhoods?
+#    - Re-load required libs (for safety in isolated execution)
+#    - Rebuild 311 sf points & join GEOID (if needed)
+#    - Aggregate complaints at tract level
+# ============================================================
+
+library(sf)
+library(dplyr)
+library(tidycensus)
+library(ggplot2)
+library(janitor)
+library(lubridate)
+
+# Ensure 311 sf object exists (convert again to include lon/lat columns)
+nyc311_sf <- nyc311 %>%
+  filter(!is.na(longitude), !is.na(latitude)) %>%
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326, remove = FALSE)
+
+# Spatial join: attach tract GEOID to each 311 complaint
+nyc311_with_tract <- st_join(
+  nyc311_sf,
+  acs_tracts_sf %>% select(GEOID),
+  join = st_within
+)
+
+# Aggregate 311 complaints by tract (total + heat complaints)
+tract_311 <- nyc311_with_tract %>%
+  st_drop_geometry() %>%
+  group_by(GEOID) %>%
+  summarize(
+    complaints_311  = n(),
+    complaints_heat = sum(complaint_type == "HEAT/HOT WATER", na.rm = TRUE),
+    .groups         = "drop"
+  )
+
+#  Join ACS data to 311 complaint counts at tract level
+tract_master <- acs_tracts_sf %>%
+  left_join(tract_311, by = "GEOID") %>%
+  mutate(
+    complaints_per_1000_units = (complaints_311 / housing_units) * 1000,
+    income_quintile           = ntile(income, 5)
+  )
+```
+
+Bright yellow zones in northern Brooklyn and the Bronx mark tracts with the highest complaint rates, highlighting hotspots of housing stress or active reporting. Dark blue zones in Staten Island, southern Queens, and parts of Manhattan show fewer complaints per housing unit. The map reflects complaint intensity, not just raw volume.
+
+```{r}
+
+# ============================================================
+# SQ1 Visualization: Choropleth of complaint density per housing unit
+# ============================================================
+
+ggplot(tract_master) +
+  geom_sf(aes(fill = complaints_per_1000_units), color = NA) +
+  scale_fill_viridis_c(
+    option   = "plasma",       # clearer color gradient
+    trans    = "sqrt",         # softens skew in complaint rates
+    na.value = "grey85",
+    name     = "Complaints\nper 1,000 Units"
+  ) +
+  labs(
+    title    = "311 Housing Complaint Density per Census Tract",
+    subtitle = "Normalized by Housing Units"
+  ) +
+  theme_void() +               # removes axes and background clutter
+  theme(
+    legend.position = "right",
+    plot.title      = element_text(size = 14, face = "bold"),
+    plot.subtitle   = element_text(size = 11)
+  )
+```
+
+The graph below shows a positive correlation between the median household income and 311 housing complaints density per 1,000 units. As income increases, complaint rates tend to rise slightly. Higher Income neighborhoods may report more complaints, lower income areas do not show disproportionately high complaint rates.
+
+```{r}
+# ============================================================
+# Clean extreme tracts and explore Income vs Complaint Density
+#     - Filter out tracts with very few units or extreme rates
+# ============================================================
+
+tract_clean <- tract_master %>%
+  filter(
+    housing_units >= 100,
+    complaints_per_1000_units <= 200
+  )
+
+ggplot(tract_clean, aes(x = income, y = complaints_per_1000_units)) +
+  geom_point(alpha = 0.6, color = "#6A3D9A") +
+  geom_smooth(method = "lm", se = TRUE, color = "red") +
+  coord_cartesian(xlim = c(30000, 90000), ylim = c(0, 100)) +  # adjust as needed
+  labs(
+    title = "Relationship Between Income and Complaint Density",
+    x     = "Median Household Income",
+    y     = "311 Complaints per 1,000 Housing Units"
+  ) +
+  theme_minimal()
+
+
+# The graph below shows a negative correlation between neighborhood income and 311 housing complaints density per 1k units.
+# High complaint rates in lower-income areas: Many of the highest complaint densities are clustered at the lower end of the income scale.
+# Outliers: A few tracts with very high complaint rates exist across income levels,
+# but they're more common in lower income neighborhoods.
+# Housing complaints are more concentrated in lower income neighborhoods.
+
+# Add complaint rate per 1,000 population
+tract_master <- tract_master %>%
+  mutate(complaints_per_1000_pop = complaints_311 / population * 1000)
+
+# Re-plot complaint density vs income (per unit)
+ggplot(tract_master, aes(x = income, y = complaints_per_1000_units)) +
+  geom_point(alpha = 0.5, color = "#6A3D9A") +
+  geom_smooth(method = "lm", se = TRUE, color = "red") +
+  coord_cartesian(xlim = c(30000, 120000), ylim = c(0, 500)) +  # Adjusted zoom
+  labs(
+    title = "Relationship Between Neighborhood Income and Complaint Density",
+    x     = "Median Household Income (ACS)",
+    y     = "311 Complaints per 1,000 Housing Units"
+  ) +
+  theme_minimal()
+```
+
+The log-scale relationship between neighborhood income and 311 housing complaint density per 1,000 housing units provides a clearer view of underlying patterns by compressing extreme complaint rates and expanding variation among lower rates. When visualized on a logarithmic y-axis, most census tracts cluster at relatively low complaint densities, indicating that the majority of neighborhoods report few complaints per unit. The fitted regression line shows a slight upward trend, suggesting that complaint density increases modestly with income rather than declining in lower-income areas. Importantly, the pattern is not strictly linear, implying that factors beyond income—such as building type, tenant awareness, reporting behavior, and borough-level context—also play a meaningful role in shaping observed complaint rates.
+
+```{r}
+# Log-transform the y-axis to reduce skew in complaint rates per unit
+ggplot(tract_clean, aes(income, complaints_per_1000_units)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", color = "red") +
+  scale_y_log10() +
+  labs(
+    title = "Income vs Complaint Density (log scale)",
+    y     = "Complaints per 1,000 Units (log)"
+  ) +
+  theme_minimal()
+```
+
+The regression analysis reveals a downward-sloping trend when plotting neighborhood income against complaint rates per capita, indicating that higher-income areas tend to have lower complaint rates per resident. The highest complaint rates are concentrated in lower-income neighborhoods, with many census tracts below \$60,000 in median household income exhibiting substantially elevated levels—sometimes reaching 400 to 600 complaints per 1,000 residents. In contrast, higher-income tracts, particularly those with median incomes above \$100,000, generally report fewer complaints per resident. This pattern suggests that, when normalized by population, housing complaints are more heavily concentrated in lower-income areas, reflecting heightened housing stress or systemic issues affecting residents in these neighborhoods.
+
+```{r}
+# ============================================================
+# Additional Maps & Plots: Complaint rate per population (not just units)
+# ============================================================
+
+# Scatterplot: income vs complaints per 1,000 people
+ggplot(tract_master, aes(x = income, y = complaints_per_1000_pop)) +
+  geom_point(alpha = 0.6, color = "#6A3D9A") +
+  geom_smooth(method = "lm", se = TRUE, color = "red") +
+  coord_cartesian(xlim = c(30000, 120000), ylim = c(0, 600)) +  # Adjusted zoom
+  labs(
+    title = "Income vs 311 Complaint Rate (Per 1,000 Residents)",
+    x     = "Median Household Income (ACS)",
+    y     = "311 Complaints per 1,000 Population"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title    = element_text(size = 14, face = "bold"),
+    axis.title.x  = element_text(size = 12),
+    axis.title.y  = element_text(size = 12),
+    axis.text     = element_text(size = 10)
+  )
+```
+
+## Income Quintile Comparisons
+
+Income quintile comparisons provide a clearer, aggregated view of how housing complaint rates vary across the income distribution. Bar charts summarizing average complaints per capita by income quintile show that the lowest-income quintiles (1 through 3) do not exhibit the highest reporting rates. Instead, higher-income neighborhoods—particularly those in the fourth and fifth income quintiles—consistently demonstrate higher average complaint rates per resident. Census tracts with missing income data also display elevated complaint rates, likely reflecting data gaps in high-density or transitional areas rather than a distinct income effect.
+
+These results challenge the common assumption that lower-income neighborhoods dominate housing complaint systems. While lower-income tracts often face more severe housing conditions, they report fewer complaints per resident on average. In contrast, higher-income residents appear more likely to file complaints, even when underlying housing quality is relatively better. This pattern suggests that complaint frequency is shaped not only by housing conditions, but also by differences in civic engagement, access to reporting tools, awareness of tenant rights, and expectations regarding housing quality across income groups.
+
+```{r}
+# Bar chart: average complaint rate by income quintile
+tract_master %>%
+  group_by(income_quintile) %>%
+  summarize(mean_rate = mean(complaints_per_1000_pop, na.rm = TRUE)) %>%
+  ggplot(aes(x = factor(income_quintile), y = mean_rate)) +
+  geom_col(fill = "black", color = "black") +   # solid black bars
+  labs(
+    title = "Average Complaint Rate per 1,000 Residents by Income Quintile",
+    x     = "Income Quintile (1 = Lowest)",
+    y     = "Complaints per 1,000 Residents"
+  ) +
+  theme_minimal(base_family = "sans") +
+  theme(
+    plot.title    = element_text(size = 14, face = "bold", color = "black"),
+    axis.title.x  = element_text(size = 12, color = "black"),
+    axis.title.y  = element_text(size = 12, color = "black"),
+    axis.text     = element_text(size = 10, color = "black")
+  )
+
+```
+
+```{r}
+# ============================================================
+# Final filtered dataset for modeling (SQ1+)
+#     - Keep tracts with enough population and units
+# ============================================================
+
+tract_s1 <- tract_master %>%
+  filter(
+    !is.na(income),
+    !is.na(population),
+    !is.na(complaints_311),
+    population    >= 500,
+    housing_units >= 100
+  ) %>%
+  mutate(
+    complaints_per_1000_pop   = complaints_311 / population * 1000,
+    complaints_per_1000_units = complaints_311 / housing_units * 1000,
+    income_quintile           = ntile(income, 5)
+  )
+```
+
+The map illustrates population-normalized 311 complaint rates across New York City census tracts, highlighting patterns of civic engagement and housing stress. Yellow areas represent tracts with the highest per capita complaint rates, signaling either elevated housing distress or active resident reporting. In contrast, dark blue areas indicate tracts with lower complaint rates, which may reflect fewer reported issues or reduced engagement. By normalizing complaints by population, the visualization controls for tract size, allowing for a clearer comparison of reporting frequency rather than raw volume.
+
+```{r}
+# Map complaint rate in the cleaned analysis sample
+ggplot(tract_s1) +
+  geom_sf(aes(fill = complaints_per_1000_pop), color = NA) +
+  scale_fill_viridis_c(
+    option   = "plasma",       # vibrant and readable gradient
+    trans    = "sqrt",         # softens skew in complaint rates
+    na.value = "grey90",
+    name     = "Complaints\nper 1,000 Residents"
+  ) +
+  labs(
+    title    = "311 Complaint Rate per 1,000 Residents",
+    subtitle = "Population-normalized density across NYC census tracts"
+  ) +
+  theme_void() +               # removes axis ticks and background clutter
+  theme(
+    plot.title    = element_text(size = 14, face = "bold"),
+    plot.subtitle = element_text(size = 11),
+    legend.title  = element_text(size = 10),
+    legend.text   = element_text(size = 9),
+    legend.position = "right"
+  )
+```
+
+Slight upward trend suggests positive correlation as income increases, complaint rate per capita rise Regardless of income majority of neighborhoods report fewer than 50 complaints per 1000 residents Outliers exists at both ends.
+
+```{r}
+# Simple scatterplot: income vs complaints per 1,000 population
+ggplot(tract_s1, aes(income, complaints_per_1000_pop)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", color = "red") +
+  labs(
+    title = "Income vs. 311 Complaint Rate",
+    x     = "Median Household Income (ACS)",
+    y     = "Complaints per 1,000 Residents"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12),
+    axis.text    = element_text(size = 10)
+  )
+
+```
+
+Complaint rates tend to increase with income, as evidenced by Quintile 5—the highest income group—showing the highest average complaint rate. In contrast, Quintiles 1 through 4 remain relatively flat, indicating minimal variation among lower and middle-income tracts. While the upward slope is modest, it is consistent, suggesting that higher-income neighborhoods report more complaints per capita on average. This pattern may reflect greater civic engagement, heightened expectations for housing quality, and improved access to reporting tools among wealthier residents.
+
+```{r}
+# Bar chart: average complaint rate per income quintile
+tract_s1 %>%
+  group_by(income_quintile) %>%
+  summarize(mean_rate = mean(complaints_per_1000_pop, na.rm = TRUE)) %>%
+  ggplot(aes(x = factor(income_quintile), y = mean_rate)) +
+  geom_col(fill = "#8B1A6B") +
+  labs(
+    title    = "Average 311 Complaint Rate by Income Quintile",
+    subtitle = "Population-normalized complaints per 1,000 residents across NYC census tracts",
+    x        = "Income Quintile (1 = Lowest)",
+    y        = "Complaints per 1,000 Residents"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title    = element_text(size = 14, face = "bold"),
+    plot.subtitle = element_text(size = 11),
+    axis.title.x  = element_text(size = 12),
+    axis.title.y  = element_text(size = 12),
+    axis.text     = element_text(size = 10)
+  )
+```
+
+# 5. Analytical Modeling
+
+## Regression and Predictive Modeling
+
+To move beyond descriptive analysis, the study employs both linear regression and a random forest model to predict complaint rates per 1,000 residents. Predictor variables include median household income, rent burden, housing units, population, and borough.
+
+The random forest model is particularly useful because it captures non-linear relationships and interactions that traditional regression may miss. The model is trained on over 2,000 census tracts after filtering for data completeness.
+
+```{r}
+# ============================================================
+# SQ1: Random Forest model to predict complaint rate
+#       using income + housing + population + borough
+# ============================================================
+library(ranger)
+
+library(ggplot2)
+library(stringr)
+library(dplyr)
+
+# Derive borough factor from tract NAME (ACS naming convention)
+tract_s1 <- tract_s1 %>%
+  mutate(
+    borough = case_when(
+      str_detect(NAME, "Bronx County")      ~ "Bronx",
+      str_detect(NAME, "Kings County")      ~ "Brooklyn",
+      str_detect(NAME, "New York County")   ~ "Manhattan",
+      str_detect(NAME, "Queens County")     ~ "Queens",
+      str_detect(NAME, "Richmond County")   ~ "Staten Island",
+      TRUE                                  ~ NA_character_
+    )
+  )
+
+# Build RF training data: drop geometry, select predictors, remove NAs
+rf_data <- tract_s1 %>%
+  st_drop_geometry() %>%        # drop sf geometry to get a plain data frame
+  select(
+    complaints_per_1000_pop,
+    income,
+    rent_burden,
+    housing_units,
+    population,
+    borough
+  ) %>%
+  mutate(borough = factor(borough)) %>%
+  na.omit()
+
+model_comp1000 <- lm(
+  complaints_per_1000_pop ~ income + rent_burden,
+  data = rf_data
+)
+
+
+# Fit Random Forest to predict complaint rate per 1,000 inhabitants
+set.seed(123)
+
+rf_model <- ranger(
+  complaints_per_1000_pop ~ .,
+  data       = rf_data,
+  num.trees  = 1000,
+  mtry       = 3,
+  importance = "impurity",
+  respect.unordered.factors = "order"
+)
+
+rf_model
+
+rf_model$variable.importance
+```
+
+# 6. Model Interpretation
+
+Model outputs indicate that income remains a meaningful predictor of complaint rates even after controlling for housing supply, population size, rent burden, and borough effects. Partial dependence plots show that predicted complaint rates increase as income rises, holding other variables constant.
+
+This finding reinforces the descriptive results: higher-income neighborhoods are more likely to generate complaints, not because they necessarily have worse housing conditions, but because residents may be more empowered, informed, or willing to engage with municipal reporting systems.
+
+Key Takeaways: - The Output shows that the Random Forest model predicted 311 complaint rate per 1k residents - The model trained on 2,176 census tracts using - income - Rent_Burden - Housing_units - population - Borough (factor)
+
+```{r}
+# ============================================================
+# Partial Dependence Plot (PDP) for income in RF model
+#       - Shows marginal effect of income holding others fixed
+# ============================================================
+library(pdp)
+library(ggplot2)
+
+pdp_income <- partial(rf_model, pred.var = "income", train = rf_data)
+
+ggplot(pdp_income, aes(x = income, y = yhat)) +
+  geom_point(alpha = 0.6, color = "black") +          # black points
+  geom_smooth(method = "lm", color = "black", se = FALSE) +  # black regression line
+  labs(
+    title    = "Partial Dependence of Complaint Rate on Income",
+    subtitle = "Predicted 311 complaints per 1,000 residents from Random Forest model",
+    x        = "Median Household Income (ACS)",
+    y        = "Predicted Complaint Rate (yhat)"
+  ) +
+  theme_minimal(base_family = "sans") +
+  theme(
+    plot.title    = element_text(size = 14, face = "bold", color = "black"),
+    plot.subtitle = element_text(size = 11, color = "black"),
+    axis.title.x  = element_text(size = 12, color = "black"),
+    axis.title.y  = element_text(size = 12, color = "black"),
+    axis.text     = element_text(size = 10, color = "black")
+  )
+
+```
+
+The partial dependence plot reveals that higher-income areas tend to report more complaints per capita, even when controlling for housing units, population, rent burden, and borough. This pattern supports the notion that civic engagement and expectations increase with income—residents in wealthier neighborhoods may be more inclined to report issues due to greater awareness, access, or advocacy. These findings reinforce earlier insights from scatterplots and bar charts, underscoring that complaint behavior is shaped not only by housing stress but also by who feels empowered to report.
+
+# 7. Answering the Supporting Question and tying back to Main Question
+
+Returning to the supporting question—are housing complaints more concentrated in lower-income neighborhoods?—the evidence from this analysis suggests that the answer is not unequivocal. The concentration of housing complaints depends critically on how those complaints are measured and normalized.
+
+When complaint volumes are normalized by housing units, lower-income neighborhoods do exhibit concentrated housing stress. Census tracts in the Bronx and parts of northern Brooklyn show elevated complaint rates per unit, reflecting older housing stock, deferred maintenance, and structural deficiencies. In this framing, complaint density highlights underlying conditions of the built environment rather than resident behavior.
+
+However, a different pattern emerges when complaints are normalized by population or examined through predictive models. Maps and scatterplots normalized per capita consistently show that higher-income neighborhoods often report equal or higher complaint rates per resident. Tracts in Manhattan and Queens, for example, display elevated per-capita reporting despite generally better housing conditions. This divergence reveals a crucial distinction: housing complaints capture reporting behavior as much as they capture housing quality.
+
+Geographic clustering further reinforces this interpretation. Lower-income tracts demonstrate concentrated complaint activity when measured per housing unit, indicating areas of persistent structural housing stress. In contrast, higher-income tracts show elevated complaint rates per resident, suggesting stronger civic engagement and a greater propensity to interact with municipal reporting systems. These patterns imply that income shapes how housing issues surface in administrative data, not simply whether they exist.
+
+Income also influences the types of complaints being reported. Lower-income neighborhoods are more likely to generate complaints related to basic habitability—such as lack of heat or hot water, leaks, and mold—issues tied directly to health and safety. Higher-income neighborhoods, by contrast, tend to report quality-of-life concerns, including noise, construction impacts, and maintenance delays. Evidence from scatterplots and income-quintile bar charts shows higher overall reporting rates in wealthier quintiles, supporting the interpretation that complaint content shifts with income—from survival needs to service expectations.
+
+These findings extend to resolution outcomes as well. Higher-income neighborhoods not only report more frequently, but their complaints may also receive faster or more consistent follow-up due to greater visibility, stronger advocacy, and fewer institutional barriers. Lower-income neighborhoods, meanwhile, may underreport due to fear of landlord retaliation, limited access to digital reporting tools, or distrust of government systems. As a result, unresolved housing stress in poorer areas may be systematically masked in complaint-based datasets.
+
+Model-based analysis reinforces these conclusions. Results from the random forest model and partial dependence plots show that income remains a significant predictor of complaint rates even after controlling for borough, housing units, population, and rent burden. The partial dependence of complaint rates on income is positive, indicating that higher-income tracts are predicted to report more complaints per capita, all else equal. This finding confirms that income influences complaint visibility independently of structural housing conditions.
+
+## Answer to the Primary Question
+
+Taken together, these results demonstrate that neighborhood income levels influence housing complaints in New York City in three interconnected ways. First, income shapes the spatial distribution of complaints: poorer areas concentrate structural housing stress, while wealthier areas concentrate reporting intensity. Second, income affects the types of complaints observed, with basic habitability issues dominating in low-income tracts and quality-of-life concerns prevailing in high-income tracts. Third, income indirectly influences resolution outcomes, as higher-income neighborhoods’ greater engagement and visibility likely lead to more consistent follow-through, while lower-income neighborhoods remain underreported and underserved.
+
+Thus, the extent to which neighborhood income levels influence housing complaints is substantial: income not only determines where complaints are concentrated, but also what kinds of issues are reported and how effectively they are resolved. Complaint data therefore reflect both housing conditions and the social dynamics of reporting, making income a critical factor in interpreting the spatial distribution, types, and resolution outcomes of housing complaints in New York City.
+
+# 8. Conclusion
+
+This analysis demonstrates that housing complaints in New York City are not simply concentrated in lower-income neighborhoods. Instead, complaint patterns reflect a complex interaction between housing conditions, neighborhood income, civic engagement, and access to reporting mechanisms.
+
+By integrating multiple administrative datasets with census data and applying rigorous normalization and modeling techniques, this study shows that income influences housing complaints in indirect but powerful ways. Understanding these dynamics is essential for interpreting complaint data responsibly and for designing equitable housing policy interventions.
